@@ -1,23 +1,42 @@
-import { Heading, Text } from "@medusajs/ui"
-
-import InteractiveLink from "@modules/common/components/interactive-link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const EmptyCartMessage = () => {
   return (
-    <div className="py-48 px-2 flex flex-col justify-center items-start" data-testid="empty-cart-message">
-      <Heading
-        level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
+    <div
+      className="py-24 px-2 flex flex-col justify-center items-center text-center gap-6"
+      data-testid="empty-cart-message"
+    >
+      {/* Icon keranjang */}
+      <div
+        className="w-20 h-20 rounded-full flex items-center justify-center"
+        style={{ backgroundColor: "#f5f0eb" }}
       >
-        Cart
-      </Heading>
-      <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        You don&apos;t have anything in your cart. Let&apos;s change that, use
-        the link below to start browsing our products.
-      </Text>
-      <div>
-        <InteractiveLink href="/store">Explore products</InteractiveLink>
+        <span className="text-3xl" style={{ color: "#c9a96e" }}>◇</span>
       </div>
+
+      <div className="flex flex-col gap-2">
+        <h1
+          className="text-2xl font-light tracking-wide"
+          style={{ color: "#1a1a1a" }}
+        >
+          Keranjang Kosong
+        </h1>
+        <p
+          className="text-sm font-light max-w-sm leading-relaxed"
+          style={{ color: "#6b6b6b" }}
+        >
+          Kamu belum menambahkan produk apapun. Yuk mulai belanja koleksi hijab premium Safiya Veil!
+        </p>
+      </div>
+
+      <LocalizedClientLink href="/store">
+        <button
+          className="px-10 py-3 text-xs tracking-[0.2em] uppercase transition-all duration-300 hover:opacity-80"
+          style={{ backgroundColor: "#1a1a1a", color: "#f5f0eb" }}
+        >
+          Belanja Sekarang
+        </button>
+      </LocalizedClientLink>
     </div>
   )
 }

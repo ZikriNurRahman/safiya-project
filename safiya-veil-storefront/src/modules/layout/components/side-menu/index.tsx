@@ -11,11 +11,12 @@ import LanguageSelect from "../language-select"
 import { HttpTypes } from "@medusajs/types"
 import { Locale } from "@lib/data/locales"
 
+// Menu dalam Bahasa Indonesia
 const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
+  Beranda: "/",
+  Toko: "/store",
+  Akun: "/account",
+  Keranjang: "/cart",
 }
 
 type SideMenuProps = {
@@ -37,7 +38,8 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <div className="relative flex h-full">
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-sm tracking-wide hover:opacity-70"
+                  style={{ color: "#1a1a1a" }}
                 >
                   Menu
                 </Popover.Button>
@@ -61,38 +63,45 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm m-2 backdrop-blur-2xl">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full rounded-rounded justify-between p-6"
+                    style={{ backgroundColor: "rgba(26, 26, 26, 0.92)" }}
                   >
                     <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
+                      <button
+                        data-testid="close-menu-button"
+                        onClick={close}
+                        style={{ color: "#f5f0eb" }}
+                      >
                         <XMark />
                       </button>
                     </div>
+
                     <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
+                      {Object.entries(SideMenuItems).map(([name, href]) => (
+                        <li key={name}>
+                          <LocalizedClientLink
+                            href={href}
+                            className="text-3xl leading-10 font-light tracking-wide transition-colors duration-200"
+                            style={{ color: "#f5f0eb" }}
+                            onClick={close}
+                            data-testid={`${name.toLowerCase()}-link`}
+                          >
+                            {name}
+                          </LocalizedClientLink>
+                        </li>
+                      ))}
                     </ul>
+
                     <div className="flex flex-col gap-y-6">
                       {!!locales?.length && (
                         <div
                           className="flex justify-between"
                           onMouseEnter={languageToggleState.open}
                           onMouseLeave={languageToggleState.close}
+                          style={{ color: "#f5f0eb" }}
                         >
                           <LanguageSelect
                             toggleState={languageToggleState}
@@ -100,17 +109,18 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                             currentLocale={currentLocale}
                           />
                           <ArrowRightMini
-                            className={clx(
-                              "transition-transform duration-150",
-                              languageToggleState.state ? "-rotate-90" : ""
-                            )}
+                            className={clx("transition-transform duration-150", {
+                              "-rotate-90": languageToggleState.state,
+                            })}
                           />
                         </div>
                       )}
+
                       <div
                         className="flex justify-between"
                         onMouseEnter={countryToggleState.open}
                         onMouseLeave={countryToggleState.close}
+                        style={{ color: "#f5f0eb" }}
                       >
                         {regions && (
                           <CountrySelect
@@ -119,15 +129,17 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           />
                         )}
                         <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            countryToggleState.state ? "-rotate-90" : ""
-                          )}
+                          className={clx("transition-transform duration-150", {
+                            "-rotate-90": countryToggleState.state,
+                          })}
                         />
                       </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
-                        reserved.
+
+                      <Text
+                        className="flex justify-between txt-compact-small"
+                        style={{ color: "#6b6b6b" }}
+                      >
+                        © {new Date().getFullYear()} Safiya Veil. All rights reserved.
                       </Text>
                     </div>
                   </div>

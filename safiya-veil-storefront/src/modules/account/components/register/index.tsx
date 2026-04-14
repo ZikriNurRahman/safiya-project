@@ -4,7 +4,6 @@ import { useActionState } from "react"
 import Input from "@modules/common/components/input"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
 
@@ -16,28 +15,31 @@ const Register = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(signup, null)
 
   return (
-    <div
-      className="max-w-sm flex flex-col items-center"
-      data-testid="register-page"
-    >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+    <div className="max-w-sm flex flex-col items-center" data-testid="register-page">
+      <h1
+        className="text-2xl font-light tracking-wide mb-2"
+        style={{ color: "#1a1a1a" }}
+      >
+        Buat Akun
       </h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p
+        className="text-center text-xs font-light mb-8"
+        style={{ color: "#6b6b6b" }}
+      >
+        Daftar dan nikmati pengalaman belanja yang lebih mudah.
       </p>
+
       <form className="w-full flex flex-col" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
+        <div className="flex flex-col w-full gap-y-3">
           <Input
-            label="First name"
+            label="Nama Depan"
             name="first_name"
             required
             autoComplete="given-name"
             data-testid="first-name-input"
           />
           <Input
-            label="Last name"
+            label="Nama Belakang"
             name="last_name"
             required
             autoComplete="family-name"
@@ -52,7 +54,7 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="email-input"
           />
           <Input
-            label="Phone"
+            label="Nomor Telepon"
             name="phone"
             type="tel"
             autoComplete="tel"
@@ -67,37 +69,54 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
+
         <ErrorMessage error={message} data-testid="register-error" />
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+
+        <span
+          className="text-center text-xs font-light mt-6"
+          style={{ color: "#6b6b6b" }}
+        >
+          Dengan mendaftar, kamu menyetujui{" "}
           <LocalizedClientLink
             href="/content/privacy-policy"
             className="underline"
+            style={{ color: "#c9a96e" }}
           >
-            Privacy Policy
+            Kebijakan Privasi
           </LocalizedClientLink>{" "}
-          and{" "}
+          dan{" "}
           <LocalizedClientLink
             href="/content/terms-of-use"
             className="underline"
+            style={{ color: "#c9a96e" }}
           >
-            Terms of Use
-          </LocalizedClientLink>
-          .
+            Syarat & Ketentuan
+          </LocalizedClientLink>{" "}
+          kami.
         </span>
-        <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
-        </SubmitButton>
+
+        <button
+          type="submit"
+          className="w-full mt-6 py-3 text-xs tracking-[0.2em] uppercase transition-all duration-300 hover:opacity-80"
+          style={{ backgroundColor: "#1a1a1a", color: "#f5f0eb" }}
+          data-testid="register-button"
+        >
+          Daftar
+        </button>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+
+      <span
+        className="text-center text-xs font-light mt-6"
+        style={{ color: "#6b6b6b" }}
+      >
+        Sudah punya akun?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
           className="underline"
+          style={{ color: "#c9a96e" }}
         >
-          Sign in
+          Masuk
         </button>
-        .
       </span>
     </div>
   )

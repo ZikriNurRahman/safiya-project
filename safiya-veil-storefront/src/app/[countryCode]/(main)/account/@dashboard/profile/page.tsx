@@ -1,54 +1,34 @@
 import { Metadata } from "next"
-
-import ProfilePhone from "@modules/account//components/profile-phone"
-import ProfileBillingAddress from "@modules/account/components/profile-billing-address"
-import ProfileEmail from "@modules/account/components/profile-email"
-import ProfileName from "@modules/account/components/profile-name"
-import ProfilePassword from "@modules/account/components/profile-password"
-
+import OrderOverview from "@modules/account/components/order-overview"
 import { notFound } from "next/navigation"
-import { listRegions } from "@lib/data/regions"
-import { retrieveCustomer } from "@lib/data/customer"
+import { listOrders } from "@lib/data/orders"
+import Divider from "@modules/common/components/divider"
+import TransferRequestForm from "@modules/account/components/transfer-request-form"
 
 export const metadata: Metadata = {
-  title: "Profile",
-  description: "View and edit your Medusa Store profile.",
+  title: "Pesanan - Safiya Veil",
+  description: "Riwayat pesanan kamu di Safiya Veil.",
 }
 
-export default async function Profile() {
-  const customer = await retrieveCustomer()
-  const regions = await listRegions()
-
-  if (!customer || !regions) {
-    notFound()
-  }
+export default async function Orders() {
+  const orders = await listOrders()
+  if (!orders) notFound()
 
   return (
-    <div className="w-full" data-testid="profile-page-wrapper">
-      <div className="mb-8 flex flex-col gap-y-4">
-        <h1 className="text-2xl-semi">Profile</h1>
-        <p className="text-base-regular">
-          View and update your profile information, including your name, email,
-          and phone number. You can also update your billing address, or change
-          your password.
+    <div className="w-full" data-testid="orders-page-wrapper">
+      <div className="mb-8 flex flex-col gap-y-2">
+        <h1 className="text-xl font-semibold tracking-wide" style={{ color: "#1a1a1a" }}>
+          Pesanan Saya
+        </h1>
+        <p className="text-sm font-light" style={{ color: "#6b6b6b" }}>
+          Lihat riwayat dan status pesanan kamu. Kamu juga bisa mengajukan pengembalian jika diperlukan.
         </p>
       </div>
-      <div className="flex flex-col gap-y-8 w-full">
-        <ProfileName customer={customer} />
-        <Divider />
-        <ProfileEmail customer={customer} />
-        <Divider />
-        <ProfilePhone customer={customer} />
-        <Divider />
-        {/* <ProfilePassword customer={customer} />
-        <Divider /> */}
-        <ProfileBillingAddress customer={customer} regions={regions} />
+      <div>
+        <OrderOverview orders={orders} />
+        <Divider className="my-12" />
+        <TransferRequestForm />
       </div>
     </div>
   )
 }
-
-const Divider = () => {
-  return <div className="w-full h-px bg-gray-200" />
-}
-;``
