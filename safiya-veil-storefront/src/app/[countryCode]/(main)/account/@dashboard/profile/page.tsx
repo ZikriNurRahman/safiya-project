@@ -7,7 +7,7 @@ import TransferRequestForm from "@modules/account/components/transfer-request-fo
 
 export const metadata: Metadata = {
   title: "Pesanan - Safiya Veil",
-  description: "Riwayat pesanan kamu di Safiya Veil.",
+  description: "riwayat pesanan kamu di Safiya Veil.",
 }
 
 export default async function Orders() {
