@@ -13,7 +13,7 @@ const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(login, null)
 
   return (
-    <div className="max-w-sm w-full flex flex-col items-center" data-testid="login-page">
+    <div className="max-w-md w-full flex flex-col items-center mx-auto" data-testid="login-page">
       <h1
         className="text-2xl font-light tracking-wide mb-2"
         style={{ color: "#1a1a1a" }}

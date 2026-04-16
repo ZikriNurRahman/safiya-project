@@ -197,26 +197,7 @@ const Hero = () => {
 
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.8 }}
-      >
-        <span
-          className="text-xs tracking-widest uppercase"
-          style={{ color: "#6b6b6b" }}
-        >
-          Scroll
-        </span>
-        <motion.div
-          className="w-px h-8"
-          style={{ backgroundColor: "#c9a96e" }}
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+      
 
     </div>
   )

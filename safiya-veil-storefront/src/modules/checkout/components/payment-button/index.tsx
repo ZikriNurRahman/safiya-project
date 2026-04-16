@@ -1,6 +1,6 @@
 "use client"
 
-import { isManual, isStripeLike } from "@lib/constants"
+import { isMidtrans, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -27,6 +27,17 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   const paymentSession = cart.payment_collection?.payment_sessions?.[0]
 
   switch (true) {
+    // ─── Midtrans Payment Button ───
+    case isMidtrans(paymentSession?.provider_id):
+      return (
+        <MidtransPaymentButton
+          notReady={notReady}
+          cart={cart}
+          data-testid={dataTestId}
+        />
+      )
+
+    // ─── Stripe Payment Button ───
     case isStripeLike(paymentSession?.provider_id):
       return (
         <StripePaymentButton
@@ -35,15 +46,134 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           data-testid={dataTestId}
         />
       )
+
+    // ─── Manual / Testing Payment Button ───
     case isManual(paymentSession?.provider_id):
       return (
-        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+        <ManualTestPaymentButton
+          notReady={notReady}
+          data-testid={dataTestId}
+        />
       )
+
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <Button disabled>
+          Pilih metode pembayaran
+        </Button>
+      )
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// MIDTRANS PAYMENT BUTTON
+// ─────────────────────────────────────────────────────────────
+const MidtransPaymentButton = ({
+  cart,
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  cart: HttpTypes.StoreCart
+  notReady: boolean
+  "data-testid"?: string
+}) => {
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const paymentSession = cart.payment_collection?.payment_sessions?.[0]
+  // Ambil snap_token dari data sesi yang sudah di-generate backend
+  const snapToken = paymentSession?.data?.snap_token as string | undefined
+
+  const handleMidtransPayment = () => {
+    setErrorMessage(null)
+
+    // Validasi: snap_token harus ada
+    if (!snapToken) {
+      setErrorMessage("Token pembayaran tidak ditemukan. Coba refresh halaman.")
+      return
+    }
+
+    // Validasi: Snap.js harus sudah ter-load
+    if (typeof window === "undefined" || !window.snap) {
+      setErrorMessage("Midtrans Snap belum siap. Coba beberapa saat lagi.")
+      return
+    }
+
+    setSubmitting(true)
+
+    // Buka popup Midtrans Snap
+    window.snap.pay(snapToken, {
+      language: "id", // Bahasa Indonesia
+
+      // ✅ Pembayaran berhasil
+      onSuccess: async (_result) => {
+        try {
+          await placeOrder()
+        } catch (err: any) {
+          setErrorMessage(err.message || "Gagal membuat pesanan.")
+          setSubmitting(false)
+        }
+      },
+
+      // ⏳ Pembayaran pending (transfer bank, dll)
+      onPending: async (_result) => {
+        try {
+          // Tetap buat order meski pending (akan dikonfirmasi via webhook)
+          await placeOrder()
+        } catch (err: any) {
+          setErrorMessage(err.message || "Gagal membuat pesanan.")
+          setSubmitting(false)
+        }
+      },
+
+      // ❌ Pembayaran error
+      onError: (result) => {
+        setErrorMessage(
+          result.status_message || "Pembayaran gagal. Coba lagi."
+        )
+        setSubmitting(false)
+      },
+
+      // 🚪 User menutup popup tanpa bayar
+      onClose: () => {
+        setSubmitting(false)
+      },
+    })
+  }
+
+  return (
+    <>
+      <button
+        onClick={handleMidtransPayment}
+        disabled={notReady || submitting || !snapToken}
+        className="w-full py-4 text-xs tracking-[0.2em] uppercase transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          backgroundColor: submitting ? "#6b6b6b" : "#1a1a1a",
+          color: "#f5f0eb",
+        }}
+        data-testid={dataTestId}
+      >
+        {submitting ? "Memproses..." : "Bayar Sekarang"}
+      </button>
+
+      {/* Info metode pembayaran yang tersedia */}
+      {!submitting && (
+        <p className="text-xs text-center mt-2" style={{ color: "#6b6b6b" }}>
+          Transfer Bank • QRIS • GoPay • ShopeePay • Kartu Kredit • dan lainnya
+        </p>
+      )}
+
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="midtrans-payment-error-message"
+      />
+    </>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
+// STRIPE PAYMENT BUTTON (tetap ada sebagai fallback)
+// ─────────────────────────────────────────────────────────────
 const StripePaymentButton = ({
   cart,
   notReady,
@@ -58,27 +188,20 @@ const StripePaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+      .catch((err) => setErrorMessage(err.message))
+      .finally(() => setSubmitting(false))
   }
 
   const stripe = useStripe()
   const elements = useElements()
   const card = elements?.getElement("card")
-
   const session = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )
-
-  const disabled = !stripe || !elements ? true : false
+  const disabled = !stripe || !elements
 
   const handlePayment = async () => {
     setSubmitting(true)
-
     if (!stripe || !elements || !card || !cart) {
       setSubmitting(false)
       return
@@ -89,46 +212,29 @@ const StripePaymentButton = ({
         payment_method: {
           card: card,
           billing_details: {
-            name:
-              cart.billing_address?.first_name +
-              " " +
-              cart.billing_address?.last_name,
-            address: {
-              city: cart.billing_address?.city ?? undefined,
-              country: cart.billing_address?.country_code ?? undefined,
-              line1: cart.billing_address?.address_1 ?? undefined,
-              line2: cart.billing_address?.address_2 ?? undefined,
-              postal_code: cart.billing_address?.postal_code ?? undefined,
-              state: cart.billing_address?.province ?? undefined,
-            },
+            name: `${cart.billing_address?.first_name} ${cart.billing_address?.last_name}`,
             email: cart.email,
-            phone: cart.billing_address?.phone ?? undefined,
           },
         },
       })
       .then(({ error, paymentIntent }) => {
         if (error) {
           const pi = error.payment_intent
-
           if (
             (pi && pi.status === "requires_capture") ||
             (pi && pi.status === "succeeded")
           ) {
             onPaymentCompleted()
           }
-
           setErrorMessage(error.message || null)
           return
         }
-
         if (
-          (paymentIntent && paymentIntent.status === "requires_capture") ||
-          paymentIntent.status === "succeeded"
+          paymentIntent?.status === "requires_capture" ||
+          paymentIntent?.status === "succeeded"
         ) {
           return onPaymentCompleted()
         }
-
-        return
       })
   }
 
@@ -141,7 +247,7 @@ const StripePaymentButton = ({
         isLoading={submitting}
         data-testid={dataTestId}
       >
-        Place order
+        Buat Pesanan
       </Button>
       <ErrorMessage
         error={errorMessage}
@@ -151,24 +257,24 @@ const StripePaymentButton = ({
   )
 }
 
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+// ─────────────────────────────────────────────────────────────
+// MANUAL TEST PAYMENT BUTTON (untuk testing di development)
+// ─────────────────────────────────────────────────────────────
+const ManualTestPaymentButton = ({
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  notReady: boolean
+  "data-testid"?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
-  }
-
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setSubmitting(true)
-
-    onPaymentCompleted()
+    await placeOrder()
+      .catch((err) => setErrorMessage(err.message))
+      .finally(() => setSubmitting(false))
   }
 
   return (
@@ -178,9 +284,9 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         isLoading={submitting}
         onClick={handlePayment}
         size="large"
-        data-testid="submit-order-button"
+        data-testid={dataTestId}
       >
-        Place order
+        Buat Pesanan (Test)
       </Button>
       <ErrorMessage
         error={errorMessage}

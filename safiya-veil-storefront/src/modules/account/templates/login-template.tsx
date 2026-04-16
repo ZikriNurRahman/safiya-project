@@ -14,7 +14,7 @@ const LoginTemplate = () => {
 
   return (
     <div
-      className="w-full min-h-screen flex items-center justify-center py-16"
+      className="w-full min-h-[100dvh] flex items-center justify-center py-16"
       style={{ backgroundColor: "#f5f0eb" }}
     >
       <div

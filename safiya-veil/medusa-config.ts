@@ -12,5 +12,23 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
-  }
+  },
+  modules: [
+  {
+    resolve: "@medusajs/medusa/payment",
+    options: {
+      providers: [
+        {
+          resolve: "./src/modules/midtrans", // Jalur ke folder modul kita
+          id: "midtrans", // Harus sama dengan identifier di service.ts
+          options: {
+              serverKey: process.env.MIDTRANS_SERVER_KEY || "",
+              clientKey: process.env.MIDTRANS_CLIENT_KEY || "",
+              isProduction: process.env.MIDTRANS_IS_PRODUCTION === "true",
+            },
+        },
+      ],
+    },
+  },
+],
 })

@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import React from "react"
 import StripeWrapper from "./stripe-wrapper"
 import { HttpTypes } from "@medusajs/types"
-import { isStripeLike } from "@lib/constants"
+import { isMidtrans, isStripeLike } from "@lib/constants"
 
 type PaymentWrapperProps = {
   cart: HttpTypes.StoreCart
@@ -28,6 +28,12 @@ const PaymentWrapper: React.FC<PaymentWrapperProps> = ({ cart, children }) => {
     (s) => s.status === "pending"
   )
 
+  // Midtrans tidak butuh wrapper khusus — Snap.js di-load global di layout.tsx
+  if (isMidtrans(paymentSession?.provider_id)) {
+    return <div>{children}</div>
+  }
+
+  // Stripe wrapper
   if (
     isStripeLike(paymentSession?.provider_id) &&
     paymentSession &&
