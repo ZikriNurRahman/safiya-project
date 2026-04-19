@@ -95,7 +95,6 @@ safiya-veil/
   medusa-config.ts
   package.json
   README.md
-  repomix-output.xml
   tsconfig.json
 safiya-veil-storefront/
   .github/
@@ -504,2748 +503,6 @@ safiya-veil-storefront/
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="safiya-veil/repomix-output.xml">
-This file is a merged representation of the entire codebase, combined into a single document by Repomix.
-
-<file_summary>
-This section contains a summary of this file.
-
-<purpose>
-This file contains a packed representation of the entire repository's contents.
-It is designed to be easily consumable by AI systems for analysis, code review,
-or other automated processes.
-</purpose>
-
-<file_format>
-The content is organized as follows:
-1. This summary section
-2. Repository information
-3. Directory structure
-4. Repository files (if enabled)
-5. Multiple file entries, each consisting of:
-  - File path as an attribute
-  - Full contents of the file
-</file_format>
-
-<usage_guidelines>
-- This file should be treated as read-only. Any changes should be made to the
-  original repository files, not this packed version.
-- When processing this file, use the file path to distinguish
-  between different files in the repository.
-- Be aware that this file may contain sensitive information. Handle it with
-  the same level of security as you would the original repository.
-</usage_guidelines>
-
-<notes>
-- Some files may have been excluded based on .gitignore rules and Repomix's configuration
-- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
-- Files matching patterns in .gitignore are excluded
-- Files matching default ignore patterns are excluded
-- Files are sorted by Git change count (files with more changes are at the bottom)
-</notes>
-
-</file_summary>
-
-<directory_structure>
-integration-tests/
-  http/
-    health.spec.ts
-    README.md
-  setup.js
-src/
-  admin/
-    i18n/
-      index.ts
-      README.md
-    README.md
-    tsconfig.json
-    vite-env.d.ts
-  api/
-    admin/
-      custom/
-        route.ts
-    store/
-      custom/
-        route.ts
-    README.md
-  jobs/
-    README.md
-  links/
-    README.md
-  modules/
-    midtrans/
-      index.ts
-      service.ts
-      types.ts
-    README.md
-  scripts/
-    README.md
-    seed.ts
-    setup-indonesia.ts
-  subscribers/
-    README.md
-  workflows/
-    README.md
-static/
-  1776002089597-tested hijab.png
-  1776003786886-tested hijab.png
-.env.template
-.env.test
-.gitignore
-.npmrc
-.yarnrc.yml
-instrumentation.ts
-jest.config.js
-medusa-config.ts
-package.json
-README.md
-tsconfig.json
-</directory_structure>
-
-<files>
-This section contains the contents of the repository's files.
-
-<file path="integration-tests/http/health.spec.ts">
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
-jest.setTimeout(60 * 1000)
-
-medusaIntegrationTestRunner({
-  inApp: true,
-  env: {},
-  testSuite: ({ api }) => {
-    describe("Ping", () => {
-      it("ping the server health endpoint", async () => {
-        const response = await api.get('/health')
-        expect(response.status).toEqual(200)
-      })
-    })
-  },
-})
-</file>
-
-<file path="integration-tests/http/README.md">
-# Integration Tests
-
-The `medusa-test-utils` package provides utility functions to create integration tests for your API routes and workflows.
-
-For example:
-
-```ts
-import { medusaIntegrationTestRunner } from "medusa-test-utils"
-
-medusaIntegrationTestRunner({
-  testSuite: ({ api, getContainer }) => {
-    describe("Custom endpoints", () => {
-      describe("GET /store/custom", () => {
-        it("returns correct message", async () => {
-          const response = await api.get(
-            `/store/custom`
-          )
-  
-          expect(response.status).toEqual(200)
-          expect(response.data).toHaveProperty("message")
-          expect(response.data.message).toEqual("Hello, World!")
-        })
-      })
-    })
-  }
-})
-```
-
-Learn more in [this documentation](https://docs.medusajs.com/learn/debugging-and-testing/testing-tools/integration-tests).
-</file>
-
-<file path="integration-tests/setup.js">
-const { MetadataStorage } = require("@medusajs/framework/mikro-orm/core")
-
-MetadataStorage.clear()
-</file>
-
-<file path="src/admin/i18n/index.ts">
-export default {}
-</file>
-
-<file path="src/admin/i18n/README.md">
-# Admin Customizations Translations
-
-The Medusa Admin dashboard supports multiple languages for its interface. Medusa uses [react-i18next](https://react.i18next.com/) to manage translations in the admin dashboard.
-
-To add translations, create JSON translation files for each language under the `src/admin/i18n/json` directory. For example, create the `src/admin/i18n/json/en.json` file with the following content:
-
-```json
-{
-  "brands": {
-    "title": "Brands",
-    "description": "Manage your product brands"
-  },
-  "done": "Done"
-}
-```
-
-Then, export the translations in `src/admin/i18n/index.ts`:
-
-```ts
-import en from "./json/en.json" with { type: "json" }
-
-export default {
-  en: {
-    translation: en,
-  },
-}
-```
-
-Finally, use translations in your admin widgets and routes using the `useTranslation` hook:
-
-```tsx
-import { defineWidgetConfig } from "@medusajs/admin-sdk"
-import { Button, Container, Heading } from "@medusajs/ui"
-import { useTranslation } from "react-i18next"
-
-const ProductWidget = () => {
-  const { t } = useTranslation()
-  return (
-    <Container className="p-0">
-      <div className="flex items-center justify-between px-6 py-4">
-        <Heading level="h2">{t("brands.title")}</Heading>
-        <p>{t("brands.description")}</p>
-      </div>
-      <div className="flex justify-end px-6 py-4">
-        <Button variant="primary">{t("done")}</Button>
-      </div>
-    </Container>
-  )
-}
-
-export const config = defineWidgetConfig({
-  zone: "product.details.before",
-})
-
-export default ProductWidget
-```
-
-Learn more about translating admin extensions in the [Translate Admin Customizations](https://docs.medusajs.com/learn/fundamentals/admin/translations) documentation.
-</file>
-
-<file path="src/admin/README.md">
-# Admin Customizations
-
-You can extend the Medusa Admin to add widgets and new pages. Your customizations interact with API routes to provide merchants with custom functionalities.
-
-> Learn more about Admin Extensions in [this documentation](https://docs.medusajs.com/learn/fundamentals/admin).
-
-## Example: Create a Widget
-
-A widget is a React component that can be injected into an existing page in the admin dashboard.
-
-For example, create the file `src/admin/widgets/product-widget.tsx` with the following content:
-
-```tsx title="src/admin/widgets/product-widget.tsx"
-import { defineWidgetConfig } from "@medusajs/admin-sdk"
-
-// The widget
-const ProductWidget = () => {
-  return (
-    <div>
-      <h2>Product Widget</h2>
-    </div>
-  )
-}
-
-// The widget's configurations
-export const config = defineWidgetConfig({
-  zone: "product.details.after",
-})
-
-export default ProductWidget
-```
-
-This inserts a widget with the text “Product Widget” at the end of a product’s details page.
-</file>
-
-<file path="src/admin/tsconfig.json">
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["."]
-}
-</file>
-
-<file path="src/admin/vite-env.d.ts">
-/// <reference types="vite/client" />
-</file>
-
-<file path="src/api/admin/custom/route.ts">
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-) {
-  res.sendStatus(200);
-}
-</file>
-
-<file path="src/api/store/custom/route.ts">
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-) {
-  res.sendStatus(200);
-}
-</file>
-
-<file path="src/api/README.md">
-# Custom API Routes
-
-An API Route is a REST API endpoint.
-
-An API Route is created in a TypeScript or JavaScript file under the `/src/api` directory of your Medusa application. The file’s name must be `route.ts` or `route.js`.
-
-> Learn more about API Routes in [this documentation](https://docs.medusajs.com/learn/fundamentals/api-routes)
-
-For example, to create a `GET` API Route at `/store/hello-world`, create the file `src/api/store/hello-world/route.ts` with the following content:
-
-```ts
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-
-export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  res.json({
-    message: "Hello world!",
-  });
-}
-```
-
-## Supported HTTP methods
-
-The file based routing supports the following HTTP methods:
-
-- GET
-- POST
-- PUT
-- PATCH
-- DELETE
-- OPTIONS
-- HEAD
-
-You can define a handler for each of these methods by exporting a function with the name of the method in the paths `route.ts` file.
-
-For example:
-
-```ts
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-
-export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  // Handle GET requests
-}
-
-export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  // Handle POST requests
-}
-
-export async function PUT(req: MedusaRequest, res: MedusaResponse) {
-  // Handle PUT requests
-}
-```
-
-## Parameters
-
-To create an API route that accepts a path parameter, create a directory within the route's path whose name is of the format `[param]`.
-
-For example, if you want to define a route that takes a `productId` parameter, you can do so by creating a file called `/api/products/[productId]/route.ts`:
-
-```ts
-import type {
-  MedusaRequest,
-  MedusaResponse,
-} from "@medusajs/framework/http"
-
-export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const { productId } = req.params;
-
-  res.json({
-    message: `You're looking for product ${productId}`
-  })
-}
-```
-
-To create an API route that accepts multiple path parameters, create within the file's path multiple directories whose names are of the format `[param]`.
-
-For example, if you want to define a route that takes both a `productId` and a `variantId` parameter, you can do so by creating a file called `/api/products/[productId]/variants/[variantId]/route.ts`.
-
-## Using the container
-
-The Medusa container is available on `req.scope`. Use it to access modules' main services and other registered resources:
-
-```ts
-import type {
-  MedusaRequest,
-  MedusaResponse,
-} from "@medusajs/framework/http"
-
-export const GET = async (
-  req: MedusaRequest,
-  res: MedusaResponse
-) => {
-  const productModuleService = req.scope.resolve("product")
-
-  const [, count] = await productModuleService.listAndCount()
-
-  res.json({
-    count,
-  })
-}
-```
-
-## Middleware
-
-You can apply middleware to your routes by creating a file called `/api/middlewares.ts`. This file must export a configuration object with what middleware you want to apply to which routes.
-
-For example, if you want to apply a custom middleware function to the `/store/custom` route, you can do so by adding the following to your `/api/middlewares.ts` file:
-
-```ts
-import { defineMiddlewares } from "@medusajs/framework/http"
-import type {
-  MedusaRequest,
-  MedusaResponse,
-  MedusaNextFunction,
-} from "@medusajs/framework/http";
-
-async function logger(
-  req: MedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) {
-  console.log("Request received");
-  next();
-}
-
-export default defineMiddlewares({
-  routes: [
-    {
-      matcher: "/store/custom",
-      middlewares: [logger],
-    },
-  ],
-})
-```
-
-The `matcher` property can be either a string or a regular expression. The `middlewares` property accepts an array of middleware functions.
-</file>
-
-<file path="src/jobs/README.md">
-# Custom scheduled jobs
-
-A scheduled job is a function executed at a specified interval of time in the background of your Medusa application.
-
-> Learn more about scheduled jobs in [this documentation](https://docs.medusajs.com/learn/fundamentals/scheduled-jobs).
-
-A scheduled job is created in a TypeScript or JavaScript file under the `src/jobs` directory.
-
-For example, create the file `src/jobs/hello-world.ts` with the following content:
-
-```ts
-import {
-  MedusaContainer
-} from "@medusajs/framework/types";
-
-export default async function myCustomJob(container: MedusaContainer) {
-  const productService = container.resolve("product")
-
-  const products = await productService.listAndCountProducts();
-
-  // Do something with the products
-}
-
-export const config = {
-  name: "daily-product-report",
-  schedule: "0 0 * * *", // Every day at midnight
-};
-```
-
-A scheduled job file must export:
-
-- The function to be executed whenever it’s time to run the scheduled job.
-- A configuration object defining the job. It has three properties:
-  - `name`: a unique name for the job.
-  - `schedule`: a [cron expression](https://crontab.guru/).
-  - `numberOfExecutions`: an optional integer, specifying how many times the job will execute before being removed
-
-The `handler` is a function that accepts one parameter, `container`, which is a `MedusaContainer` instance used to resolve services.
-</file>
-
-<file path="src/links/README.md">
-# Module Links
-
-A module link forms an association between two data models of different modules, while maintaining module isolation.
-
-> Learn more about links in [this documentation](https://docs.medusajs.com/learn/fundamentals/module-links)
-
-For example:
-
-```ts
-import BlogModule from "../modules/blog"
-import ProductModule from "@medusajs/medusa/product"
-import { defineLink } from "@medusajs/framework/utils"
-
-export default defineLink(
-  ProductModule.linkable.product,
-  BlogModule.linkable.post
-)
-```
-
-This defines a link between the Product Module's `product` data model and the Blog Module (custom module)'s `post` data model.
-
-Then, in the Medusa application, run the following command to sync the links to the database:
-
-```bash
-npx medusa db:migrate
-```
-</file>
-
-<file path="src/modules/midtrans/index.ts">
-import { ModuleProvider, Modules } from "@medusajs/framework/utils"
-import MidtransPaymentService from "./service"
-
-// ✅ PERUBAHAN: Menggunakan ModuleProvider khusus untuk PAYMENT
-export default ModuleProvider(Modules.PAYMENT, {
-  services: [MidtransPaymentService],
-})
-</file>
-
-<file path="src/modules/midtrans/service.ts">
-import {
-  AbstractPaymentProvider,
-  PaymentSessionStatus,
-} from "@medusajs/framework/utils"
-import MidtransClient from "midtrans-client"
-import crypto from "crypto"
-import {
-  MidtransOptions,
-  MidtransNotification,
-  MidtransTransactionStatus,
-} from "./types"
-
-import { 
-  InitiatePaymentInput, 
-  InitiatePaymentOutput,
-  UpdatePaymentInput,
-  UpdatePaymentOutput,
-  AuthorizePaymentInput,
-  AuthorizePaymentOutput,
-  CapturePaymentInput,
-  CapturePaymentOutput,
-  CancelPaymentInput,
-  CancelPaymentOutput,
-  DeletePaymentInput,
-  DeletePaymentOutput,
-  RefundPaymentInput,
-  RefundPaymentOutput,
-  RetrievePaymentInput,
-  RetrievePaymentOutput,
-  GetPaymentStatusInput,
-  GetPaymentStatusOutput, // ✅ Ditambahkan
-  ProviderWebhookPayload,
-  WebhookActionResult
-} from "@medusajs/framework/types"
-
-class MidtransPaymentService extends AbstractPaymentProvider<MidtransOptions> {
-  static identifier = "midtrans"
-
-  protected options_: MidtransOptions
-  protected snap_: MidtransClient.Snap
-  protected coreApi_: MidtransClient.CoreApi
-
-  constructor(container: any, options: MidtransOptions) {
-    super(container, options)
-    this.options_ = options
-
-    this.snap_ = new MidtransClient.Snap({
-      isProduction: options.isProduction,
-      serverKey: options.serverKey,
-      clientKey: options.clientKey,
-    })
-
-    this.coreApi_ = new MidtransClient.CoreApi({
-      isProduction: options.isProduction,
-      serverKey: options.serverKey,
-      clientKey: options.clientKey,
-    })
-  }
-
-  async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
-    try {
-      const transactionAmount = Number(input.amount)
-      const paymentContext = input.context as any
-      const cart = paymentContext?.cart
-
-      const orderId = `SAFIYA-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
-
-      const transactionDetails = {
-        order_id: orderId,
-        gross_amount: Math.round(transactionAmount),
-      }
-
-      const customerDetails = {
-        first_name: cart?.shipping_address?.first_name || "Customer",
-        last_name: cart?.shipping_address?.last_name || "",
-        email: cart?.email || "customer@example.com",
-        phone: cart?.shipping_address?.phone || "",
-      }
-
-      const itemDetails = cart?.items?.map((item: any) => ({
-        id: item.title?.toLowerCase().replace(/\s/g, "-") || "item",
-        price: Math.round(Number(item.unit_price || 0)),
-        quantity: item.quantity || 1,
-        name: item.title || "Produk Safiya Veil",
-      })) || []
-
-      const parameter = {
-        transaction_details: transactionDetails,
-        customer_details: customerDetails,
-        item_details: itemDetails.length > 0 ? itemDetails : undefined,
-        callbacks: {
-          finish: `${process.env.STORE_URL || "http://localhost:3000"}/id/order/confirmed`,
-        },
-        enabled_payments: [
-          "credit_card", "bca_va", "bni_va", "bri_va", "mandiri_va",
-          "permata_va", "other_va", "gopay", "qris", "shopeepay",
-        ],
-      }
-
-      const transaction = await this.snap_.createTransaction(parameter)
-
-      return {
-        id: orderId,
-        data: {
-          snap_token: transaction.token,
-          snap_redirect_url: transaction.redirect_url,
-          order_id: orderId,
-        },
-      }
-    } catch (error: any) {
-      throw new Error(error.message || "Gagal membuat transaksi Midtrans")
-    }
-  }
-
-  async updatePayment(input: UpdatePaymentInput): Promise<UpdatePaymentOutput> {
-    const res = await this.initiatePayment(input as unknown as InitiatePaymentInput)
-    return res as unknown as UpdatePaymentOutput
-  }
-
-  async authorizePayment(input: AuthorizePaymentInput): Promise<AuthorizePaymentOutput> {
-    try {
-      const { status } = await this.getPaymentStatus({ data: input.data } as GetPaymentStatusInput)
-      return { data: input.data, status }
-    } catch (error) {
-      return { data: input.data, status: PaymentSessionStatus.PENDING }
-    }
-  }
-
-  // ✅ PERUBAHAN: Return type diubah menjadi GetPaymentStatusOutput dan mengembalikan Object { status: ... }
-  async getPaymentStatus(input: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
-    try {
-      const orderId = input.data?.order_id as string
-      if (!orderId) return { status: PaymentSessionStatus.PENDING }
-
-      // ✅ PERUBAHAN: Ditambahkan 'as any' untuk mengakali tipe data midtrans-client yang kurang lengkap
-      const response = await (this.coreApi_ as any).transaction.status(orderId)
-      const { transaction_status, fraud_status } = response as {
-        transaction_status: MidtransTransactionStatus
-        fraud_status?: string
-      }
-
-      switch (transaction_status) {
-        case "capture":
-          if (fraud_status === "accept") return { status: PaymentSessionStatus.AUTHORIZED }
-          if (fraud_status === "challenge") return { status: PaymentSessionStatus.REQUIRES_MORE }
-          return { status: PaymentSessionStatus.PENDING }
-        case "settlement":
-          return { status: PaymentSessionStatus.AUTHORIZED }
-        case "pending":
-          return { status: PaymentSessionStatus.PENDING }
-        case "authorize":
-          return { status: PaymentSessionStatus.REQUIRES_MORE }
-        case "deny":
-        case "cancel":
-        case "expire":
-          return { status: PaymentSessionStatus.ERROR }
-        default:
-          return { status: PaymentSessionStatus.PENDING }
-      }
-    } catch {
-      return { status: PaymentSessionStatus.PENDING }
-    }
-  }
-
-  async capturePayment(input: CapturePaymentInput): Promise<CapturePaymentOutput> {
-    try {
-      const orderId = input.data?.order_id as string
-      if (orderId) {
-        try {
-          // ✅ PERUBAHAN: Ditambahkan 'as any'
-          await (this.coreApi_ as any).transaction.capture(orderId)
-        } catch { }
-      }
-      return { data: { ...input.data, captured: true } }
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
-  }
-
-  async refundPayment(input: RefundPaymentInput): Promise<RefundPaymentOutput> {
-    try {
-      const orderId = input.data?.order_id as string
-      if (orderId) {
-        // ✅ PERUBAHAN: Ditambahkan 'as any'
-        await (this.coreApi_ as any).transaction.refund(orderId, {
-          amount: Math.round(Number(input.amount)),
-          reason: "Permintaan pengembalian dana",
-        })
-      }
-      return { data: { ...input.data, refunded_amount: input.amount } }
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
-  }
-
-  async retrievePayment(input: RetrievePaymentInput): Promise<RetrievePaymentOutput> {
-    try {
-      const orderId = input.data?.order_id as string
-      if (!orderId) return { data: input.data }
-      
-      // ✅ PERUBAHAN: Ditambahkan 'as any'
-      const status = await (this.coreApi_ as any).transaction.status(orderId)
-      return { data: { ...input.data, ...(status as object) } }
-    } catch {
-      return { data: input.data }
-    }
-  }
-
-  async cancelPayment(input: CancelPaymentInput): Promise<CancelPaymentOutput> {
-    try {
-      const orderId = input.data?.order_id as string
-      if (orderId) {
-        // ✅ PERUBAHAN: Ditambahkan 'as any'
-        await (this.coreApi_ as any).transaction.cancel(orderId)
-      }
-      return { data: { ...input.data, canceled: true } }
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
-  }
-
-  async deletePayment(input: DeletePaymentInput): Promise<DeletePaymentOutput> {
-    return await this.cancelPayment(input as unknown as CancelPaymentInput)
-  }
-
-  async getWebhookActionAndData(payload: ProviderWebhookPayload["payload"]): Promise<WebhookActionResult> {
-    const data = payload.data as unknown as MidtransNotification
-    const serverKey = this.options_.serverKey
-    
-    const expectedSignature = crypto
-      .createHash("sha512")
-      .update(`${data.order_id}${data.status_code}${data.gross_amount}${serverKey}`)
-      .digest("hex")
-
-    if (expectedSignature !== data.signature_key) {
-      return { action: "not_supported" }
-    }
-
-    const { transaction_status, fraud_status } = data
-
-    if ((transaction_status === "capture" && fraud_status === "accept") || transaction_status === "settlement") {
-      return {
-        action: "authorized",
-        data: { session_id: data.order_id, amount: Math.round(parseFloat(data.gross_amount)) },
-      }
-    }
-
-    if (["deny", "cancel", "expire"].includes(transaction_status)) {
-      return { action: "failed", data: { session_id: data.order_id, amount: 0 } }
-    }
-
-    return { action: "not_supported" }
-  }
-}
-
-export default MidtransPaymentService
-</file>
-
-<file path="src/modules/midtrans/types.ts">
-// Konfigurasi yang dipass dari medusa-config.ts
-export type MidtransOptions = {
-  serverKey: string    // Server key dari Midtrans Dashboard
-  clientKey: string    // Client key dari Midtrans Dashboard
-  isProduction: boolean // false = sandbox, true = production
-}
-
-// Status transaksi dari Midtrans API
-export type MidtransTransactionStatus =
-  | "capture"         // Kartu kredit berhasil di-capture
-  | "settlement"      // Pembayaran lunas
-  | "pending"         // Menunggu pembayaran (transfer bank, dll)
-  | "deny"            // Ditolak
-  | "cancel"          // Dibatalkan
-  | "expire"          // Kadaluarsa
-  | "refund"          // Dikembalikan
-  | "partial_refund"  // Sebagian dikembalikan
-  | "authorize"       // Diotorisasi (belum di-capture)
-
-// Payload notifikasi dari Midtrans Webhook
-export type MidtransNotification = {
-  transaction_id: string
-  order_id: string
-  gross_amount: string
-  payment_type: string
-  transaction_status: MidtransTransactionStatus
-  fraud_status?: string
-  signature_key?: string
-  status_code: string
-  currency: string
-  transaction_time: string
-}
-</file>
-
-<file path="src/modules/README.md">
-# Custom Module
-
-A module is a package of reusable functionalities. It can be integrated into your Medusa application without affecting the overall system. You can create a module as part of a plugin.
-
-> Learn more about modules in [this documentation](https://docs.medusajs.com/learn/fundamentals/modules).
-
-To create a module:
-
-## 1. Create a Data Model
-
-A data model represents a table in the database. You create a data model in a TypeScript or JavaScript file under the `models` directory of a module.
-
-For example, create the file `src/modules/blog/models/post.ts` with the following content:
-
-```ts
-import { model } from "@medusajs/framework/utils"
-
-const Post = model.define("post", {
-  id: model.id().primaryKey(),
-  title: model.text(),
-})
-
-export default Post
-```
-
-## 2. Create a Service
-
-A module must define a service. A service is a TypeScript or JavaScript class holding methods related to a business logic or commerce functionality.
-
-For example, create the file `src/modules/blog/service.ts` with the following content:
-
-```ts
-import { MedusaService } from "@medusajs/framework/utils"
-import Post from "./models/post"
-
-class BlogModuleService extends MedusaService({
-  Post,
-}){
-}
-
-export default BlogModuleService
-```
-
-## 3. Export Module Definition
-
-A module must have an `index.ts` file in its root directory that exports its definition. The definition specifies the main service of the module.
-
-For example, create the file `src/modules/blog/index.ts` with the following content:
-
-```ts
-import BlogModuleService from "./service"
-import { Module } from "@medusajs/framework/utils"
-
-export const BLOG_MODULE = "blog"
-
-export default Module(BLOG_MODULE, {
-  service: BlogModuleService,
-})
-```
-
-## 4. Add Module to Medusa's Configurations
-
-To start using the module, add it to `medusa-config.ts`:
-
-```ts
-module.exports = defineConfig({
-  projectConfig: {
-    // ...
-  },
-  modules: [
-    {
-      resolve: "./src/modules/blog",
-    },
-  ],
-})
-```
-
-## 5. Generate and Run Migrations
-
-To generate migrations for your module, run the following command:
-
-```bash
-npx medusa db:generate blog
-```
-
-Then, to run migrations, run the following command:
-
-```bash
-npx medusa db:migrate
-```
-
-## Use Module
-
-You can use the module in customizations within the Medusa application, such as workflows and API routes.
-
-For example, to use the module in an API route:
-
-```ts
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
-import BlogModuleService from "../../../modules/blog/service"
-import { BLOG_MODULE } from "../../../modules/blog"
-
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-): Promise<void> {
-  const blogModuleService: BlogModuleService = req.scope.resolve(
-    BLOG_MODULE
-  )
-
-  const posts = await blogModuleService.listPosts()
-
-  res.json({
-    posts
-  })
-}
-```
-</file>
-
-<file path="src/scripts/README.md">
-# Custom CLI Script
-
-A custom CLI script is a function to execute through Medusa's CLI tool. This is useful when creating custom Medusa tooling to run as a CLI tool.
-
-> Learn more about custom CLI scripts in [this documentation](https://docs.medusajs.com/learn/fundamentals/custom-cli-scripts).
-
-## How to Create a Custom CLI Script?
-
-To create a custom CLI script, create a TypeScript or JavaScript file under the `src/scripts` directory. The file must default export a function.
-
-For example, create the file `src/scripts/my-script.ts` with the following content:
-
-```ts title="src/scripts/my-script.ts"
-import { 
-  ExecArgs,
-} from "@medusajs/framework/types"
-
-export default async function myScript ({
-  container
-}: ExecArgs) {
-  const productModuleService = container.resolve("product")
-
-  const [, count] = await productModuleService.listAndCountProducts()
-
-  console.log(`You have ${count} product(s)`)
-}
-```
-
-The function receives as a parameter an object having a `container` property, which is an instance of the Medusa Container. Use it to resolve resources in your Medusa application.
-
----
-
-## How to Run Custom CLI Script?
-
-To run the custom CLI script, run the `exec` command:
-
-```bash
-npx medusa exec ./src/scripts/my-script.ts
-```
-
----
-
-## Custom CLI Script Arguments
-
-Your script can accept arguments from the command line. Arguments are passed to the function's object parameter in the `args` property.
-
-For example:
-
-```ts
-import { ExecArgs } from "@medusajs/framework/types"
-
-export default async function myScript ({
-  args
-}: ExecArgs) {
-  console.log(`The arguments you passed: ${args}`)
-}
-```
-
-Then, pass the arguments in the `exec` command after the file path:
-
-```bash
-npx medusa exec ./src/scripts/my-script.ts arg1 arg2
-```
-</file>
-
-<file path="src/scripts/seed.ts">
-import { CreateInventoryLevelInput, ExecArgs } from "@medusajs/framework/types";
-import {
-  ContainerRegistrationKeys,
-  Modules,
-  ProductStatus,
-} from "@medusajs/framework/utils";
-import {
-  createWorkflow,
-  transform,
-  WorkflowResponse,
-} from "@medusajs/framework/workflows-sdk";
-import {
-  createApiKeysWorkflow,
-  createInventoryLevelsWorkflow,
-  createProductCategoriesWorkflow,
-  createProductsWorkflow,
-  createRegionsWorkflow,
-  createSalesChannelsWorkflow,
-  createShippingOptionsWorkflow,
-  createShippingProfilesWorkflow,
-  createStockLocationsWorkflow,
-  createTaxRegionsWorkflow,
-  linkSalesChannelsToApiKeyWorkflow,
-  linkSalesChannelsToStockLocationWorkflow,
-  updateStoresStep,
-  updateStoresWorkflow,
-} from "@medusajs/medusa/core-flows";
-import { ApiKey } from "../../.medusa/types/query-entry-points";
-
-const updateStoreCurrencies = createWorkflow(
-  "update-store-currencies",
-  (input: {
-    supported_currencies: { currency_code: string; is_default?: boolean }[];
-    store_id: string;
-  }) => {
-    const normalizedInput = transform({ input }, (data) => {
-      return {
-        selector: { id: data.input.store_id },
-        update: {
-          supported_currencies: data.input.supported_currencies.map(
-            (currency) => {
-              return {
-                currency_code: currency.currency_code,
-                is_default: currency.is_default ?? false,
-              };
-            }
-          ),
-        },
-      };
-    });
-
-    const stores = updateStoresStep(normalizedInput);
-
-    return new WorkflowResponse(stores);
-  }
-);
-
-export default async function seedDemoData({ container }: ExecArgs) {
-  const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
-  const link = container.resolve(ContainerRegistrationKeys.LINK);
-  const query = container.resolve(ContainerRegistrationKeys.QUERY);
-  const fulfillmentModuleService = container.resolve(Modules.FULFILLMENT);
-  const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL);
-  const storeModuleService = container.resolve(Modules.STORE);
-
-  const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
-
-  logger.info("Seeding store data...");
-  const [store] = await storeModuleService.listStores();
-  let defaultSalesChannel = await salesChannelModuleService.listSalesChannels({
-    name: "Default Sales Channel",
-  });
-
-  if (!defaultSalesChannel.length) {
-    // create the default sales channel
-    const { result: salesChannelResult } = await createSalesChannelsWorkflow(
-      container
-    ).run({
-      input: {
-        salesChannelsData: [
-          {
-            name: "Default Sales Channel",
-          },
-        ],
-      },
-    });
-    defaultSalesChannel = salesChannelResult;
-  }
-
-  await updateStoreCurrencies(container).run({
-    input: {
-      store_id: store.id,
-      supported_currencies: [
-        {
-          currency_code: "eur",
-          is_default: true,
-        },
-        {
-          currency_code: "usd",
-        },
-      ],
-    },
-  });
-
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: {
-        default_sales_channel_id: defaultSalesChannel[0].id,
-      },
-    },
-  });
-  logger.info("Seeding region data...");
-  const { result: regionResult } = await createRegionsWorkflow(container).run({
-    input: {
-      regions: [
-        {
-          name: "Europe",
-          currency_code: "eur",
-          countries,
-          payment_providers: ["pp_system_default"],
-        },
-      ],
-    },
-  });
-  const region = regionResult[0];
-  logger.info("Finished seeding regions.");
-
-  logger.info("Seeding tax regions...");
-  await createTaxRegionsWorkflow(container).run({
-    input: countries.map((country_code) => ({
-      country_code,
-      provider_id: "tp_system",
-    })),
-  });
-  logger.info("Finished seeding tax regions.");
-
-  logger.info("Seeding stock location data...");
-  const { result: stockLocationResult } = await createStockLocationsWorkflow(
-    container
-  ).run({
-    input: {
-      locations: [
-        {
-          name: "European Warehouse",
-          address: {
-            city: "Copenhagen",
-            country_code: "DK",
-            address_1: "",
-          },
-        },
-      ],
-    },
-  });
-  const stockLocation = stockLocationResult[0];
-
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: {
-        default_location_id: stockLocation.id,
-      },
-    },
-  });
-
-  await link.create({
-    [Modules.STOCK_LOCATION]: {
-      stock_location_id: stockLocation.id,
-    },
-    [Modules.FULFILLMENT]: {
-      fulfillment_provider_id: "manual_manual",
-    },
-  });
-
-  logger.info("Seeding fulfillment data...");
-  const shippingProfiles = await fulfillmentModuleService.listShippingProfiles({
-    type: "default",
-  });
-  let shippingProfile = shippingProfiles.length ? shippingProfiles[0] : null;
-
-  if (!shippingProfile) {
-    const { result: shippingProfileResult } =
-      await createShippingProfilesWorkflow(container).run({
-        input: {
-          data: [
-            {
-              name: "Default Shipping Profile",
-              type: "default",
-            },
-          ],
-        },
-      });
-    shippingProfile = shippingProfileResult[0];
-  }
-
-  const fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-    name: "European Warehouse delivery",
-    type: "shipping",
-    service_zones: [
-      {
-        name: "Europe",
-        geo_zones: [
-          {
-            country_code: "gb",
-            type: "country",
-          },
-          {
-            country_code: "de",
-            type: "country",
-          },
-          {
-            country_code: "dk",
-            type: "country",
-          },
-          {
-            country_code: "se",
-            type: "country",
-          },
-          {
-            country_code: "fr",
-            type: "country",
-          },
-          {
-            country_code: "es",
-            type: "country",
-          },
-          {
-            country_code: "it",
-            type: "country",
-          },
-        ],
-      },
-    ],
-  });
-
-  await link.create({
-    [Modules.STOCK_LOCATION]: {
-      stock_location_id: stockLocation.id,
-    },
-    [Modules.FULFILLMENT]: {
-      fulfillment_set_id: fulfillmentSet.id,
-    },
-  });
-
-  await createShippingOptionsWorkflow(container).run({
-    input: [
-      {
-        name: "Standard Shipping",
-        price_type: "flat",
-        provider_id: "manual_manual",
-        service_zone_id: fulfillmentSet.service_zones[0].id,
-        shipping_profile_id: shippingProfile.id,
-        type: {
-          label: "Standard",
-          description: "Ship in 2-3 days.",
-          code: "standard",
-        },
-        prices: [
-          {
-            currency_code: "usd",
-            amount: 10,
-          },
-          {
-            currency_code: "eur",
-            amount: 10,
-          },
-          {
-            region_id: region.id,
-            amount: 10,
-          },
-        ],
-        rules: [
-          {
-            attribute: "enabled_in_store",
-            value: "true",
-            operator: "eq",
-          },
-          {
-            attribute: "is_return",
-            value: "false",
-            operator: "eq",
-          },
-        ],
-      },
-      {
-        name: "Express Shipping",
-        price_type: "flat",
-        provider_id: "manual_manual",
-        service_zone_id: fulfillmentSet.service_zones[0].id,
-        shipping_profile_id: shippingProfile.id,
-        type: {
-          label: "Express",
-          description: "Ship in 24 hours.",
-          code: "express",
-        },
-        prices: [
-          {
-            currency_code: "usd",
-            amount: 10,
-          },
-          {
-            currency_code: "eur",
-            amount: 10,
-          },
-          {
-            region_id: region.id,
-            amount: 10,
-          },
-        ],
-        rules: [
-          {
-            attribute: "enabled_in_store",
-            value: "true",
-            operator: "eq",
-          },
-          {
-            attribute: "is_return",
-            value: "false",
-            operator: "eq",
-          },
-        ],
-      },
-    ],
-  });
-  logger.info("Finished seeding fulfillment data.");
-
-  await linkSalesChannelsToStockLocationWorkflow(container).run({
-    input: {
-      id: stockLocation.id,
-      add: [defaultSalesChannel[0].id],
-    },
-  });
-  logger.info("Finished seeding stock location data.");
-
-  logger.info("Seeding publishable API key data...");
-  let publishableApiKey: ApiKey | null = null;
-  const { data } = await query.graph({
-    entity: "api_key",
-    fields: ["id"],
-    filters: {
-      type: "publishable",
-    },
-  });
-
-  publishableApiKey = data?.[0];
-
-  if (!publishableApiKey) {
-    const {
-      result: [publishableApiKeyResult],
-    } = await createApiKeysWorkflow(container).run({
-      input: {
-        api_keys: [
-          {
-            title: "Webshop",
-            type: "publishable",
-            created_by: "",
-          },
-        ],
-      },
-    });
-
-    publishableApiKey = publishableApiKeyResult as ApiKey;
-  }
-
-  await linkSalesChannelsToApiKeyWorkflow(container).run({
-    input: {
-      id: publishableApiKey.id,
-      add: [defaultSalesChannel[0].id],
-    },
-  });
-  logger.info("Finished seeding publishable API key data.");
-
-  logger.info("Seeding product data...");
-
-  const { result: categoryResult } = await createProductCategoriesWorkflow(
-    container
-  ).run({
-    input: {
-      product_categories: [
-        {
-          name: "Shirts",
-          is_active: true,
-        },
-        {
-          name: "Sweatshirts",
-          is_active: true,
-        },
-        {
-          name: "Pants",
-          is_active: true,
-        },
-        {
-          name: "Merch",
-          is_active: true,
-        },
-      ],
-    },
-  });
-
-  await createProductsWorkflow(container).run({
-    input: {
-      products: [
-        {
-          title: "Medusa T-Shirt",
-          category_ids: [
-            categoryResult.find((cat) => cat.name === "Shirts")!.id,
-          ],
-          description:
-            "Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.",
-          handle: "t-shirt",
-          weight: 400,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-            {
-              title: "Color",
-              values: ["Black", "White"],
-            },
-          ],
-          variants: [
-            {
-              title: "S / Black",
-              sku: "SHIRT-S-BLACK",
-              options: {
-                Size: "S",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "S / White",
-              sku: "SHIRT-S-WHITE",
-              options: {
-                Size: "S",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M / Black",
-              sku: "SHIRT-M-BLACK",
-              options: {
-                Size: "M",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M / White",
-              sku: "SHIRT-M-WHITE",
-              options: {
-                Size: "M",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L / Black",
-              sku: "SHIRT-L-BLACK",
-              options: {
-                Size: "L",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L / White",
-              sku: "SHIRT-L-WHITE",
-              options: {
-                Size: "L",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL / Black",
-              sku: "SHIRT-XL-BLACK",
-              options: {
-                Size: "XL",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL / White",
-              sku: "SHIRT-XL-WHITE",
-              options: {
-                Size: "XL",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-          ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel[0].id,
-            },
-          ],
-        },
-        {
-          title: "Medusa Sweatshirt",
-          category_ids: [
-            categoryResult.find((cat) => cat.name === "Sweatshirts")!.id,
-          ],
-          description:
-            "Reimagine the feeling of a classic sweatshirt. With our cotton sweatshirt, everyday essentials no longer have to be ordinary.",
-          handle: "sweatshirt",
-          weight: 400,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatshirt-vintage-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatshirt-vintage-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
-          variants: [
-            {
-              title: "S",
-              sku: "SWEATSHIRT-S",
-              options: {
-                Size: "S",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "SWEATSHIRT-M",
-              options: {
-                Size: "M",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SWEATSHIRT-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SWEATSHIRT-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-          ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel[0].id,
-            },
-          ],
-        },
-        {
-          title: "Medusa Sweatpants",
-          category_ids: [
-            categoryResult.find((cat) => cat.name === "Pants")!.id,
-          ],
-          description:
-            "Reimagine the feeling of classic sweatpants. With our cotton sweatpants, everyday essentials no longer have to be ordinary.",
-          handle: "sweatpants",
-          weight: 400,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatpants-gray-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatpants-gray-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
-          variants: [
-            {
-              title: "S",
-              sku: "SWEATPANTS-S",
-              options: {
-                Size: "S",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "SWEATPANTS-M",
-              options: {
-                Size: "M",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SWEATPANTS-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SWEATPANTS-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-          ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel[0].id,
-            },
-          ],
-        },
-        {
-          title: "Medusa Shorts",
-          category_ids: [
-            categoryResult.find((cat) => cat.name === "Merch")!.id,
-          ],
-          description:
-            "Reimagine the feeling of classic shorts. With our cotton shorts, everyday essentials no longer have to be ordinary.",
-          handle: "shorts",
-          weight: 400,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/shorts-vintage-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/shorts-vintage-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
-          variants: [
-            {
-              title: "S",
-              sku: "SHORTS-S",
-              options: {
-                Size: "S",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "SHORTS-M",
-              options: {
-                Size: "M",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SHORTS-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SHORTS-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-          ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel[0].id,
-            },
-          ],
-        },
-      ],
-    },
-  });
-  logger.info("Finished seeding product data.");
-
-  logger.info("Seeding inventory levels.");
-
-  const { data: inventoryItems } = await query.graph({
-    entity: "inventory_item",
-    fields: ["id"],
-  });
-
-  const inventoryLevels: CreateInventoryLevelInput[] = [];
-  for (const inventoryItem of inventoryItems) {
-    const inventoryLevel = {
-      location_id: stockLocation.id,
-      stocked_quantity: 1000000,
-      inventory_item_id: inventoryItem.id,
-    };
-    inventoryLevels.push(inventoryLevel);
-  }
-
-  await createInventoryLevelsWorkflow(container).run({
-    input: {
-      inventory_levels: inventoryLevels,
-    },
-  });
-
-  logger.info("Finished seeding inventory levels data.");
-}
-</file>
-
-<file path="src/scripts/setup-indonesia.ts">
-import { ExecArgs } from "@medusajs/framework/types"
-import {
-  ContainerRegistrationKeys,
-  Modules,
-} from "@medusajs/framework/utils"
-import {
-  createRegionsWorkflow,
-  createShippingOptionsWorkflow,
-  createShippingProfilesWorkflow,
-  createStockLocationsWorkflow,
-  createSalesChannelsWorkflow,
-  createTaxRegionsWorkflow,
-  linkSalesChannelsToStockLocationWorkflow,
-  updateStoresWorkflow,
-} from "@medusajs/medusa/core-flows"
-
-export default async function setupIndonesia({ container }: ExecArgs) {
-  const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
-  const link = container.resolve(ContainerRegistrationKeys.LINK)
-  const fulfillmentModuleService = container.resolve(Modules.FULFILLMENT)
-  const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL)
-  const storeModuleService = container.resolve(Modules.STORE)
-  const regionModuleService = container.resolve(Modules.REGION)
-
-  const [store] = await storeModuleService.listStores()
-
-  // ─── 1. Update store currency to support IDR ───
-  logger.info("Updating store to support IDR...")
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: {
-        supported_currencies: [
-          { currency_code: "idr", is_default: true },
-          { currency_code: "usd", is_default: false },
-        ],
-      },
-    },
-  })
-  logger.info("✅ Store updated with IDR support")
-
-  // ─── 2. Buat atau ambil Region Indonesia ───
-  logger.info("Setting up Indonesia region...")
-  const existingRegions = await regionModuleService.listRegions({
-    name: "Indonesia",
-  })
-
-  let region: any
-  if (existingRegions.length > 0) {
-    region = existingRegions[0]
-    logger.info(`✅ Found existing Indonesia region: ${region.id}`)
-  } else {
-    const { result: regionResult } = await createRegionsWorkflow(container).run({
-      input: {
-        regions: [
-          {
-            name: "Indonesia",
-            currency_code: "idr",
-            countries: ["id"],      // ← Kode negara Indonesia
-            payment_providers: ["pp_system_default"],
-          },
-        ],
-      },
-    })
-    region = regionResult[0]
-    logger.info(`✅ Created Indonesia region: ${region.id}`)
-  }
-
-  // ─── 3. Tax region untuk Indonesia ───
-  logger.info("Setting up tax regions...")
-  try {
-    await createTaxRegionsWorkflow(container).run({
-      input: [{ country_code: "id", provider_id: "tp_system" }],
-    })
-    logger.info("✅ Tax region created for Indonesia")
-  } catch {
-    logger.info("ℹ️ Tax region already exists, skipping...")
-  }
-
-  // ─── 4. Default Sales Channel ───
-  logger.info("Setting up sales channel...")
-  let salesChannels = await salesChannelModuleService.listSalesChannels({
-    name: "Default Sales Channel",
-  })
-
-  if (!salesChannels.length) {
-    const { result } = await createSalesChannelsWorkflow(container).run({
-      input: {
-        salesChannelsData: [{ name: "Default Sales Channel" }],
-      },
-    })
-    salesChannels = result
-  }
-  const defaultSalesChannel = salesChannels[0]
-  logger.info(`✅ Sales channel: ${defaultSalesChannel.id}`)
-
-  // ─── 5. Warehouse Indonesia ───
-  logger.info("Creating Indonesia warehouse...")
-  const existingLocations = await container
-    .resolve(Modules.STOCK_LOCATION)
-    .listStockLocations({ name: "Gudang Indonesia" })
-
-  let stockLocation: any
-  if (existingLocations.length > 0) {
-    stockLocation = existingLocations[0]
-    logger.info(`✅ Found existing warehouse: ${stockLocation.id}`)
-  } else {
-    const { result: locationResult } = await createStockLocationsWorkflow(
-      container
-    ).run({
-      input: {
-        locations: [
-          {
-            name: "Gudang Indonesia",
-            address: {
-              city: "Jakarta",
-              country_code: "ID",
-              address_1: "Jl. Indonesia No. 1",
-            },
-          },
-        ],
-      },
-    })
-    stockLocation = locationResult[0]
-    logger.info(`✅ Created warehouse: ${stockLocation.id}`)
-  }
-
-  // Update store default location
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: { default_location_id: stockLocation.id },
-    },
-  })
-
-  // Link sales channel ke stock location
-  await linkSalesChannelsToStockLocationWorkflow(container).run({
-    input: { id: stockLocation.id, add: [defaultSalesChannel.id] },
-  })
-
-  // Link fulfillment provider ke stock location
-  try {
-    await link.create({
-      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
-      [Modules.FULFILLMENT]: { fulfillment_provider_id: "manual_manual" },
-    })
-  } catch {
-    logger.info("ℹ️ Stock location already linked to fulfillment provider")
-  }
-
-  // ─── 6. Shipping Profile ───
-  logger.info("Setting up shipping profile...")
-  const existingProfiles = await fulfillmentModuleService.listShippingProfiles({
-    type: "default",
-  })
-
-  let shippingProfile = existingProfiles[0]
-  if (!shippingProfile) {
-    const { result } = await createShippingProfilesWorkflow(container).run({
-      input: { data: [{ name: "Default Shipping Profile", type: "default" }] },
-    })
-    shippingProfile = result[0]
-  }
-  logger.info(`✅ Shipping profile: ${shippingProfile.id}`)
-
-  // ─── 7. Fulfillment Set dengan Indonesia geo zone ───
-  logger.info("Creating fulfillment set for Indonesia...")
-  const existingSets = await fulfillmentModuleService.listFulfillmentSets({
-    name: "Pengiriman Indonesia",
-  })
-
-  let fulfillmentSet: any
-  if (existingSets.length > 0) {
-    fulfillmentSet = existingSets[0]
-    logger.info(`✅ Found existing fulfillment set: ${fulfillmentSet.id}`)
-  } else {
-    fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-      name: "Pengiriman Indonesia",
-      type: "shipping",
-      service_zones: [
-        {
-          name: "Indonesia",
-          geo_zones: [
-            {
-              country_code: "id",  // ← Indonesia
-              type: "country",
-            },
-          ],
-        },
-      ],
-    })
-    logger.info(`✅ Created fulfillment set: ${fulfillmentSet.id}`)
-  }
-
-  // Link warehouse ke fulfillment set
-  try {
-    await link.create({
-      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
-      [Modules.FULFILLMENT]: { fulfillment_set_id: fulfillmentSet.id },
-    })
-  } catch {
-    logger.info("ℹ️ Already linked")
-  }
-
-  // ─── 8. Shipping Options dengan harga IDR ───
-  logger.info("Creating shipping options...")
-  const serviceZoneId = fulfillmentSet.service_zones?.[0]?.id
-
-  if (!serviceZoneId) {
-    logger.error("❌ No service zone found!")
-    return
-  }
-
-  try {
-    await createShippingOptionsWorkflow(container).run({
-      input: [
-        {
-          name: "Reguler (3-5 hari)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Reguler",
-            description: "Estimasi tiba 3-5 hari kerja",
-            code: "regular",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 15000,  // Rp 15.000
-            },
-            {
-              region_id: region.id,
-              amount: 15000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-        {
-          name: "Express (1-2 hari)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Express",
-            description: "Estimasi tiba 1-2 hari kerja",
-            code: "express",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 35000,  // Rp 35.000
-            },
-            {
-              region_id: region.id,
-              amount: 35000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-        {
-          name: "Same Day (hari ini)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Same Day",
-            description: "Tiba di hari yang sama (area tertentu)",
-            code: "same_day",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 60000,  // Rp 60.000
-            },
-            {
-              region_id: region.id,
-              amount: 60000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-      ],
-    })
-    logger.info("✅ Shipping options created!")
-  } catch (err: any) {
-    logger.error(`❌ Error creating shipping options: ${err.message}`)
-  }
-
-  // ─── 9. Midtrans sebagai payment provider di region ───
-  logger.info("Adding Midtrans to Indonesia region...")
-  try {
-    // ✅ PERUBAHAN: Gunakan Link Module untuk menghubungkan Region dengan Payment Provider
-    await link.create({
-      [Modules.REGION]: { region_id: region.id },
-      [Modules.PAYMENT]: { payment_provider_id: "pp_midtrans_midtrans" },
-    })
-    
-    await link.create({
-      [Modules.REGION]: { region_id: region.id },
-      [Modules.PAYMENT]: { payment_provider_id: "pp_system_default" },
-    })
-
-    logger.info("✅ Midtrans and default payment added to Indonesia region")
-  } catch (err: any) {
-    // Kalau sudah pernah di-link sebelumnya, dia akan masuk ke catch ini (aman)
-    logger.info(`ℹ️ Info / Already linked: ${err.message}`)
-  }
-
-  logger.info("🎉 Setup Indonesia selesai!")
-  logger.info(`Region ID baru: ${region.id}`)
-  logger.info("Sekarang update .env.local storefront dengan:")
-  logger.info("NEXT_PUBLIC_DEFAULT_REGION=id")
-}
-</file>
-
-<file path="src/subscribers/README.md">
-# Custom subscribers
-
-Subscribers handle events emitted in the Medusa application.
-
-> Learn more about Subscribers in [this documentation](https://docs.medusajs.com/learn/fundamentals/events-and-subscribers).
-
-The subscriber is created in a TypeScript or JavaScript file under the `src/subscribers` directory.
-
-For example, create the file `src/subscribers/product-created.ts` with the following content:
-
-```ts
-import {
-  type SubscriberConfig,
-} from "@medusajs/framework"
-
-// subscriber function
-export default async function productCreateHandler() {
-  console.log("A product was created")
-}
-
-// subscriber config
-export const config: SubscriberConfig = {
-  event: "product.created",
-}
-```
-
-A subscriber file must export:
-
-- The subscriber function that is an asynchronous function executed whenever the associated event is triggered.
-- A configuration object defining the event this subscriber is listening to.
-
-## Subscriber Parameters
-
-A subscriber receives an object having the following properties:
-
-- `event`: An object holding the event's details. It has a `data` property, which is the event's data payload.
-- `container`: The Medusa container. Use it to resolve modules' main services and other registered resources.
-
-```ts
-import type {
-  SubscriberArgs,
-  SubscriberConfig,
-} from "@medusajs/framework"
-
-export default async function productCreateHandler({
-  event: { data },
-  container,
-}: SubscriberArgs<{ id: string }>) {
-  const productId = data.id
-
-  const productModuleService = container.resolve("product")
-
-  const product = await productModuleService.retrieveProduct(productId)
-
-  console.log(`The product ${product.title} was created`)
-}
-
-export const config: SubscriberConfig = {
-  event: "product.created",
-}
-```
-</file>
-
-<file path="src/workflows/README.md">
-# Custom Workflows
-
-A workflow is a series of queries and actions that complete a task.
-
-The workflow is created in a TypeScript or JavaScript file under the `src/workflows` directory.
-
-> Learn more about workflows in [this documentation](https://docs.medusajs.com/learn/fundamentals/workflows).
-
-For example:
-
-```ts
-import {
-  createStep,
-  createWorkflow,
-  WorkflowResponse,
-  StepResponse,
-} from "@medusajs/framework/workflows-sdk"
-
-const step1 = createStep("step-1", async () => {
-  return new StepResponse(`Hello from step one!`)
-})
-
-type WorkflowInput = {
-  name: string
-}
-
-const step2 = createStep(
-  "step-2",
-  async ({ name }: WorkflowInput) => {
-    return new StepResponse(`Hello ${name} from step two!`)
-  }
-)
-
-type WorkflowOutput = {
-  message1: string
-  message2: string
-}
-
-const helloWorldWorkflow = createWorkflow(
-  "hello-world",
-  (input: WorkflowInput) => {
-    const greeting1 = step1()
-    const greeting2 = step2(input)
-    
-    return new WorkflowResponse({
-      message1: greeting1,
-      message2: greeting2
-    })
-  }
-)
-
-export default helloWorldWorkflow
-```
-
-## Execute Workflow
-
-You can execute the workflow from other resources, such as API routes, scheduled jobs, or subscribers.
-
-For example, to execute the workflow in an API route:
-
-```ts
-import type {
-  MedusaRequest,
-  MedusaResponse,
-} from "@medusajs/framework"
-import myWorkflow from "../../../workflows/hello-world"
-
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-) {
-  const { result } = await myWorkflow(req.scope)
-    .run({
-      input: {
-        name: req.query.name as string,
-      },
-    })
-
-  res.send(result)
-}
-```
-</file>
-
-<file path=".env.template">
-STORE_CORS=http://localhost:8000,https://docs.medusajs.com
-ADMIN_CORS=http://localhost:5173,http://localhost:9000,https://docs.medusajs.com
-AUTH_CORS=http://localhost:5173,http://localhost:9000,https://docs.medusajs.com
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=supersecret
-COOKIE_SECRET=supersecret
-DATABASE_URL=
-DB_NAME=medusa-v2
-</file>
-
-<file path=".env.test">
-
-</file>
-
-<file path=".gitignore">
-/dist
-.env
-.DS_Store
-/uploads
-/node_modules
-yarn-error.log
-
-.idea
-
-coverage
-
-!src/**
-
-./tsconfig.tsbuildinfo
-medusa-db.sql
-build
-.cache
-
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-.medusa
-</file>
-
-<file path=".npmrc">
-public-hoist-pattern[]=*@medusajs/*
-public-hoist-pattern[]=@tanstack/react-query
-public-hoist-pattern[]=react-i18next
-public-hoist-pattern[]=react-router-dom
-</file>
-
-<file path=".yarnrc.yml">
-nodeLinker: node-modules
-
-yarnPath: .yarn/releases/yarn-4.12.0.cjs
-</file>
-
-<file path="instrumentation.ts">
-// Uncomment this file to enable instrumentation and observability using OpenTelemetry
-// Refer to the docs for installation instructions: https://docs.medusajs.com/learn/debugging-and-testing/instrumentation
-
-// import { registerOtel } from "@medusajs/medusa"
-// // If using an exporter other than Zipkin, require it here.
-// import { ZipkinExporter } from "@opentelemetry/exporter-zipkin"
-
-// // If using an exporter other than Zipkin, initialize it here.
-// const exporter = new ZipkinExporter({
-//   serviceName: 'my-medusa-project',
-// })
-
-// export function register() {
-//   registerOtel({
-//     serviceName: 'medusajs',
-//     // pass exporter
-//     exporter,
-//     instrument: {
-//       http: true,
-//       workflows: true,
-//       query: true
-//     },
-//   })
-// }
-</file>
-
-<file path="jest.config.js">
-const { loadEnv } = require("@medusajs/utils");
-loadEnv("test", process.cwd());
-
-module.exports = {
-  transform: {
-    "^.+\\.[jt]s$": [
-      "@swc/jest",
-      {
-        jsc: {
-          parser: { syntax: "typescript", decorators: true },
-        },
-      },
-    ],
-  },
-  testEnvironment: "node",
-  moduleFileExtensions: ["js", "ts", "json"],
-  modulePathIgnorePatterns: ["dist/", "<rootDir>/.medusa/"],
-  setupFiles: ["./integration-tests/setup.js"],
-};
-
-if (process.env.TEST_TYPE === "integration:http") {
-  module.exports.testMatch = ["**/integration-tests/http/*.spec.[jt]s"];
-} else if (process.env.TEST_TYPE === "integration:modules") {
-  module.exports.testMatch = ["**/src/modules/*/__tests__/**/*.[jt]s"];
-} else if (process.env.TEST_TYPE === "unit") {
-  module.exports.testMatch = ["**/src/**/__tests__/**/*.unit.spec.[jt]s"];
-}
-</file>
-
-<file path="medusa-config.ts">
-import { loadEnv, defineConfig } from '@medusajs/framework/utils'
-
-loadEnv(process.env.NODE_ENV || 'development', process.cwd())
-
-module.exports = defineConfig({
-  projectConfig: {
-    databaseUrl: process.env.DATABASE_URL,
-    http: {
-      storeCors: process.env.STORE_CORS!,
-      adminCors: process.env.ADMIN_CORS!,
-      authCors: process.env.AUTH_CORS!,
-      jwtSecret: process.env.JWT_SECRET || "supersecret",
-      cookieSecret: process.env.COOKIE_SECRET || "supersecret",
-    }
-  },
-  admin: {
-    disable: process.env.NODE_ENV === "production",
-  },
-  modules: [
-  {
-    resolve: "@medusajs/medusa/payment",
-    options: {
-      providers: [
-        {
-          resolve: "./src/modules/midtrans", // Jalur ke folder modul kita
-          id: "midtrans", // Harus sama dengan identifier di service.ts
-          options: {
-              serverKey: process.env.MIDTRANS_SERVER_KEY || "",
-              clientKey: process.env.MIDTRANS_CLIENT_KEY || "",
-              isProduction: process.env.MIDTRANS_IS_PRODUCTION === "true",
-            },
-        },
-      ],
-    },
-  },
-],
-})
-</file>
-
-<file path="package.json">
-{
-  "name": "safiya-veil",
-  "version": "0.0.1",
-  "description": "A starter for Medusa projects.",
-  "author": "Medusa (https://medusajs.com)",
-  "license": "MIT",
-  "keywords": [
-    "sqlite",
-    "postgres",
-    "typescript",
-    "ecommerce",
-    "headless",
-    "medusa"
-  ],
-  "scripts": {
-    "build": "medusa build",
-    "seed": "medusa exec ./src/scripts/seed.ts",
-    "start": "medusa start",
-    "dev": "medusa develop",
-    "test:integration:http": "TEST_TYPE=integration:http NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
-    "test:integration:modules": "TEST_TYPE=integration:modules NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
-    "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"
-  },
-  "dependencies": {
-    "@medusajs/admin-sdk": "2.13.6",
-    "@medusajs/cli": "2.13.6",
-    "@medusajs/file-local-next": "^0.0.3",
-    "@medusajs/framework": "2.13.6",
-    "@medusajs/medusa": "2.13.6",
-    "@types/midtrans-client": "^1.4.0",
-    "midtrans-client": "^1.4.3"
-  },
-  "devDependencies": {
-    "@medusajs/test-utils": "2.13.6",
-    "@swc/core": "^1.7.28",
-    "@swc/jest": "^0.2.36",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^20.12.11",
-    "@types/react": "^18.3.2",
-    "@types/react-dom": "^18.2.25",
-    "jest": "^29.7.0",
-    "prop-types": "^15.8.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.14",
-    "yalc": "^1.0.0-pre.53"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "npm@11.8.0"
-}
-</file>
-
-<file path="README.md">
-<p align="center">
-  <a href="https://www.medusajs.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/59018053/229103275-b5e482bb-4601-46e6-8142-244f531cebdb.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    <img alt="Medusa logo" src="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    </picture>
-  </a>
-</p>
-<h1 align="center">
-  Medusa
-</h1>
-
-<h4 align="center">
-  <a href="https://docs.medusajs.com">Documentation</a> |
-  <a href="https://www.medusajs.com">Website</a>
-</h4>
-
-<p align="center">
-  Building blocks for digital commerce
-</p>
-<p align="center">
-  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-    <a href="https://www.producthunt.com/posts/medusa"><img src="https://img.shields.io/badge/Product%20Hunt-%231%20Product%20of%20the%20Day-%23DA552E" alt="Product Hunt"></a>
-  <a href="https://discord.gg/xpCwq3Kfn8">
-    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
-  </a>
-</p>
-
-## Compatibility
-
-This starter is compatible with versions >= 2 of `@medusajs/medusa`. 
-
-## Getting Started
-
-Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to set up a server.
-
-Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
-
-## What is Medusa
-
-Medusa is a set of commerce modules and tools that allow you to build rich, reliable, and performant commerce applications without reinventing core commerce logic. The modules can be customized and used to build advanced ecommerce stores, marketplaces, or any product that needs foundational commerce primitives. All modules are open-source and freely available on npm.
-
-Learn more about [Medusa’s architecture](https://docs.medusajs.com/learn/introduction/architecture) and [commerce modules](https://docs.medusajs.com/learn/fundamentals/modules/commerce-modules) in the Docs.
-
-## Build with AI Agents
-
-### Claude Code Plugin
-
-If you use AI agents like Claude Code, check out the [medusa-dev Claude Code plugin](https://github.com/medusajs/medusa-claude-plugins).
-
-### Other Agents
-
-If you use AI agents other than Claude Code, copy the [skills directory](https://github.com/medusajs/medusa-claude-plugins/tree/main/plugins/medusa-dev/skills) into your agent's relevant `skills` directory.
-
-### MCP Server
-
-You can also add the MCP server `https://docs.medusajs.com/mcp` to your AI agents to answer questions related to Medusa. The `medusa-dev` Claude Code plugin includes this MCP server by default.
-
-## Community & Contributions
-
-The community and core team are available in [GitHub Discussions](https://github.com/medusajs/medusa/discussions), where you can ask for support, discuss roadmap, and share ideas.
-
-Join our [Discord server](https://discord.com/invite/medusajs) to meet other community members.
-
-## Other channels
-
-- [GitHub Issues](https://github.com/medusajs/medusa/issues)
-- [Twitter](https://twitter.com/medusajs)
-- [LinkedIn](https://www.linkedin.com/company/medusajs)
-- [Medusa Blog](https://medusajs.com/blog/)
-</file>
-
-<file path="tsconfig.json">
-{
-  "compilerOptions": {
-    "target": "ES2021",
-    "esModuleInterop": true,
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "declaration": false,
-    "sourceMap": false,
-    "inlineSourceMap": true,
-    "outDir": "./.medusa/server",
-    "rootDir": "./",
-    "jsx": "react-jsx",
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "checkJs": false,
-    "strictNullChecks": true
-  },
-  "ts-node": {
-    "swc": true
-  },
-  "include": [
-    "**/*",
-    ".medusa/types/*"
-  ],
-  "exclude": [
-    "node_modules",
-    ".medusa/server",
-    ".medusa/admin",
-    ".cache"
-  ]
-}
-</file>
-
-</files>
-</file>
 
 <file path="safiya-veil/.vscode/settings.json">
 {
@@ -5082,335 +2339,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
   });
 
   logger.info("Finished seeding inventory levels data.");
-}
-</file>
-
-<file path="safiya-veil/src/scripts/setup-indonesia.ts">
-import { ExecArgs } from "@medusajs/framework/types"
-import {
-  ContainerRegistrationKeys,
-  Modules,
-} from "@medusajs/framework/utils"
-import {
-  createRegionsWorkflow,
-  createShippingOptionsWorkflow,
-  createShippingProfilesWorkflow,
-  createStockLocationsWorkflow,
-  createSalesChannelsWorkflow,
-  createTaxRegionsWorkflow,
-  linkSalesChannelsToStockLocationWorkflow,
-  updateStoresWorkflow,
-} from "@medusajs/medusa/core-flows"
-
-export default async function setupIndonesia({ container }: ExecArgs) {
-  const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
-  const link = container.resolve(ContainerRegistrationKeys.LINK)
-  const fulfillmentModuleService = container.resolve(Modules.FULFILLMENT)
-  const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL)
-  const storeModuleService = container.resolve(Modules.STORE)
-  const regionModuleService = container.resolve(Modules.REGION)
-
-  const [store] = await storeModuleService.listStores()
-
-  // ─── 1. Update store currency to support IDR ───
-  logger.info("Updating store to support IDR...")
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: {
-        supported_currencies: [
-          { currency_code: "idr", is_default: true },
-          { currency_code: "usd", is_default: false },
-        ],
-      },
-    },
-  })
-  logger.info("✅ Store updated with IDR support")
-
-  // ─── 2. Buat atau ambil Region Indonesia ───
-  logger.info("Setting up Indonesia region...")
-  const existingRegions = await regionModuleService.listRegions({
-    name: "Indonesia",
-  })
-
-  let region: any
-  if (existingRegions.length > 0) {
-    region = existingRegions[0]
-    logger.info(`✅ Found existing Indonesia region: ${region.id}`)
-  } else {
-    const { result: regionResult } = await createRegionsWorkflow(container).run({
-      input: {
-        regions: [
-          {
-            name: "Indonesia",
-            currency_code: "idr",
-            countries: ["id"],      // ← Kode negara Indonesia
-            payment_providers: ["pp_system_default"],
-          },
-        ],
-      },
-    })
-    region = regionResult[0]
-    logger.info(`✅ Created Indonesia region: ${region.id}`)
-  }
-
-  // ─── 3. Tax region untuk Indonesia ───
-  logger.info("Setting up tax regions...")
-  try {
-    await createTaxRegionsWorkflow(container).run({
-      input: [{ country_code: "id", provider_id: "tp_system" }],
-    })
-    logger.info("✅ Tax region created for Indonesia")
-  } catch {
-    logger.info("ℹ️ Tax region already exists, skipping...")
-  }
-
-  // ─── 4. Default Sales Channel ───
-  logger.info("Setting up sales channel...")
-  let salesChannels = await salesChannelModuleService.listSalesChannels({
-    name: "Default Sales Channel",
-  })
-
-  if (!salesChannels.length) {
-    const { result } = await createSalesChannelsWorkflow(container).run({
-      input: {
-        salesChannelsData: [{ name: "Default Sales Channel" }],
-      },
-    })
-    salesChannels = result
-  }
-  const defaultSalesChannel = salesChannels[0]
-  logger.info(`✅ Sales channel: ${defaultSalesChannel.id}`)
-
-  // ─── 5. Warehouse Indonesia ───
-  logger.info("Creating Indonesia warehouse...")
-  const existingLocations = await container
-    .resolve(Modules.STOCK_LOCATION)
-    .listStockLocations({ name: "Gudang Indonesia" })
-
-  let stockLocation: any
-  if (existingLocations.length > 0) {
-    stockLocation = existingLocations[0]
-    logger.info(`✅ Found existing warehouse: ${stockLocation.id}`)
-  } else {
-    const { result: locationResult } = await createStockLocationsWorkflow(
-      container
-    ).run({
-      input: {
-        locations: [
-          {
-            name: "Gudang Indonesia",
-            address: {
-              city: "Jakarta",
-              country_code: "ID",
-              address_1: "Jl. Indonesia No. 1",
-            },
-          },
-        ],
-      },
-    })
-    stockLocation = locationResult[0]
-    logger.info(`✅ Created warehouse: ${stockLocation.id}`)
-  }
-
-  // Update store default location
-  await updateStoresWorkflow(container).run({
-    input: {
-      selector: { id: store.id },
-      update: { default_location_id: stockLocation.id },
-    },
-  })
-
-  // Link sales channel ke stock location
-  await linkSalesChannelsToStockLocationWorkflow(container).run({
-    input: { id: stockLocation.id, add: [defaultSalesChannel.id] },
-  })
-
-  // Link fulfillment provider ke stock location
-  try {
-    await link.create({
-      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
-      [Modules.FULFILLMENT]: { fulfillment_provider_id: "manual_manual" },
-    })
-  } catch {
-    logger.info("ℹ️ Stock location already linked to fulfillment provider")
-  }
-
-  // ─── 6. Shipping Profile ───
-  logger.info("Setting up shipping profile...")
-  const existingProfiles = await fulfillmentModuleService.listShippingProfiles({
-    type: "default",
-  })
-
-  let shippingProfile = existingProfiles[0]
-  if (!shippingProfile) {
-    const { result } = await createShippingProfilesWorkflow(container).run({
-      input: { data: [{ name: "Default Shipping Profile", type: "default" }] },
-    })
-    shippingProfile = result[0]
-  }
-  logger.info(`✅ Shipping profile: ${shippingProfile.id}`)
-
-  // ─── 7. Fulfillment Set dengan Indonesia geo zone ───
-  logger.info("Creating fulfillment set for Indonesia...")
-  const existingSets = await fulfillmentModuleService.listFulfillmentSets({
-    name: "Pengiriman Indonesia",
-  })
-
-  let fulfillmentSet: any
-  if (existingSets.length > 0) {
-    fulfillmentSet = existingSets[0]
-    logger.info(`✅ Found existing fulfillment set: ${fulfillmentSet.id}`)
-  } else {
-    fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-      name: "Pengiriman Indonesia",
-      type: "shipping",
-      service_zones: [
-        {
-          name: "Indonesia",
-          geo_zones: [
-            {
-              country_code: "id",  // ← Indonesia
-              type: "country",
-            },
-          ],
-        },
-      ],
-    })
-    logger.info(`✅ Created fulfillment set: ${fulfillmentSet.id}`)
-  }
-
-  // Link warehouse ke fulfillment set
-  try {
-    await link.create({
-      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
-      [Modules.FULFILLMENT]: { fulfillment_set_id: fulfillmentSet.id },
-    })
-  } catch {
-    logger.info("ℹ️ Already linked")
-  }
-
-  // ─── 8. Shipping Options dengan harga IDR ───
-  logger.info("Creating shipping options...")
-  const serviceZoneId = fulfillmentSet.service_zones?.[0]?.id
-
-  if (!serviceZoneId) {
-    logger.error("❌ No service zone found!")
-    return
-  }
-
-  try {
-    await createShippingOptionsWorkflow(container).run({
-      input: [
-        {
-          name: "Reguler (3-5 hari)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Reguler",
-            description: "Estimasi tiba 3-5 hari kerja",
-            code: "regular",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 15000,  // Rp 15.000
-            },
-            {
-              region_id: region.id,
-              amount: 15000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-        {
-          name: "Express (1-2 hari)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Express",
-            description: "Estimasi tiba 1-2 hari kerja",
-            code: "express",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 35000,  // Rp 35.000
-            },
-            {
-              region_id: region.id,
-              amount: 35000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-        {
-          name: "Same Day (hari ini)",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Same Day",
-            description: "Tiba di hari yang sama (area tertentu)",
-            code: "same_day",
-          },
-          prices: [
-            {
-              currency_code: "idr",
-              amount: 60000,  // Rp 60.000
-            },
-            {
-              region_id: region.id,
-              amount: 60000,
-            },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-      ],
-    })
-    logger.info("✅ Shipping options created!")
-  } catch (err: any) {
-    logger.error(`❌ Error creating shipping options: ${err.message}`)
-  }
-
-  // ─── 9. Midtrans sebagai payment provider di region ───
-  logger.info("Adding Midtrans to Indonesia region...")
-  try {
-    // ✅ PERUBAHAN: Gunakan Link Module untuk menghubungkan Region dengan Payment Provider
-    await link.create({
-      [Modules.REGION]: { region_id: region.id },
-      [Modules.PAYMENT]: { payment_provider_id: "pp_midtrans_midtrans" },
-    })
-    
-    await link.create({
-      [Modules.REGION]: { region_id: region.id },
-      [Modules.PAYMENT]: { payment_provider_id: "pp_system_default" },
-    })
-
-    logger.info("✅ Midtrans and default payment added to Indonesia region")
-  } catch (err: any) {
-    // Kalau sudah pernah di-link sebelumnya, dia akan masuk ke catch ini (aman)
-    logger.info(`ℹ️ Info / Already linked: ${err.message}`)
-  }
-
-  logger.info("🎉 Setup Indonesia selesai!")
-  logger.info(`Region ID baru: ${region.id}`)
-  logger.info("Sekarang update .env.local storefront dengan:")
-  logger.info("NEXT_PUBLIC_DEFAULT_REGION=id")
 }
 </file>
 
@@ -19233,6 +16161,335 @@ module.exports = {
 }
 </file>
 
+<file path="safiya-veil/src/scripts/setup-indonesia.ts">
+import { ExecArgs } from "@medusajs/framework/types"
+import {
+  ContainerRegistrationKeys,
+  Modules,
+} from "@medusajs/framework/utils"
+import {
+  createRegionsWorkflow,
+  createShippingOptionsWorkflow,
+  createShippingProfilesWorkflow,
+  createStockLocationsWorkflow,
+  createSalesChannelsWorkflow,
+  createTaxRegionsWorkflow,
+  linkSalesChannelsToStockLocationWorkflow,
+  updateStoresWorkflow,
+} from "@medusajs/medusa/core-flows"
+
+export default async function setupIndonesia({ container }: ExecArgs) {
+  const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
+  const link = container.resolve(ContainerRegistrationKeys.LINK)
+  const fulfillmentModuleService = container.resolve(Modules.FULFILLMENT)
+  const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL)
+  const storeModuleService = container.resolve(Modules.STORE)
+  const regionModuleService = container.resolve(Modules.REGION)
+
+  const [store] = await storeModuleService.listStores()
+
+  // ─── 1. Update store currency to support IDR ───
+  logger.info("Updating store to support IDR...")
+  await updateStoresWorkflow(container).run({
+    input: {
+      selector: { id: store.id },
+      update: {
+        supported_currencies: [
+          { currency_code: "idr", is_default: true },
+          { currency_code: "usd", is_default: false },
+        ],
+      },
+    },
+  })
+  logger.info("✅ Store updated with IDR support")
+
+  // ─── 2. Buat atau ambil Region Indonesia ───
+  logger.info("Setting up Indonesia region...")
+  const existingRegions = await regionModuleService.listRegions({
+    name: "Indonesia",
+  })
+
+  let region: any
+  if (existingRegions.length > 0) {
+    region = existingRegions[0]
+    logger.info(`✅ Found existing Indonesia region: ${region.id}`)
+  } else {
+    const { result: regionResult } = await createRegionsWorkflow(container).run({
+      input: {
+        regions: [
+          {
+            name: "Indonesia",
+            currency_code: "idr",
+            countries: ["id"],      // ← Kode negara Indonesia
+            payment_providers: ["pp_system_default"],
+          },
+        ],
+      },
+    })
+    region = regionResult[0]
+    logger.info(`✅ Created Indonesia region: ${region.id}`)
+  }
+
+  // ─── 3. Tax region untuk Indonesia ───
+  logger.info("Setting up tax regions...")
+  try {
+    await createTaxRegionsWorkflow(container).run({
+      input: [{ country_code: "id", provider_id: "tp_system" }],
+    })
+    logger.info("✅ Tax region created for Indonesia")
+  } catch {
+    logger.info("ℹ️ Tax region already exists, skipping...")
+  }
+
+  // ─── 4. Default Sales Channel ───
+  logger.info("Setting up sales channel...")
+  let salesChannels = await salesChannelModuleService.listSalesChannels({
+    name: "Default Sales Channel",
+  })
+
+  if (!salesChannels.length) {
+    const { result } = await createSalesChannelsWorkflow(container).run({
+      input: {
+        salesChannelsData: [{ name: "Default Sales Channel" }],
+      },
+    })
+    salesChannels = result
+  }
+  const defaultSalesChannel = salesChannels[0]
+  logger.info(`✅ Sales channel: ${defaultSalesChannel.id}`)
+
+  // ─── 5. Warehouse Indonesia ───
+  logger.info("Creating Indonesia warehouse...")
+  const existingLocations = await container
+    .resolve(Modules.STOCK_LOCATION)
+    .listStockLocations({ name: "Gudang Indonesia" })
+
+  let stockLocation: any
+  if (existingLocations.length > 0) {
+    stockLocation = existingLocations[0]
+    logger.info(`✅ Found existing warehouse: ${stockLocation.id}`)
+  } else {
+    const { result: locationResult } = await createStockLocationsWorkflow(
+      container
+    ).run({
+      input: {
+        locations: [
+          {
+            name: "Gudang Indonesia",
+            address: {
+              city: "Jakarta",
+              country_code: "ID",
+              address_1: "Jl. Indonesia No. 1",
+            },
+          },
+        ],
+      },
+    })
+    stockLocation = locationResult[0]
+    logger.info(`✅ Created warehouse: ${stockLocation.id}`)
+  }
+
+  // Update store default location
+  await updateStoresWorkflow(container).run({
+    input: {
+      selector: { id: store.id },
+      update: { default_location_id: stockLocation.id },
+    },
+  })
+
+  // Link sales channel ke stock location
+  await linkSalesChannelsToStockLocationWorkflow(container).run({
+    input: { id: stockLocation.id, add: [defaultSalesChannel.id] },
+  })
+
+  // Link fulfillment provider ke stock location
+  try {
+    await link.create({
+      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
+      [Modules.FULFILLMENT]: { fulfillment_provider_id: "manual_manual" },
+    })
+  } catch {
+    logger.info("ℹ️ Stock location already linked to fulfillment provider")
+  }
+
+  // ─── 6. Shipping Profile ───
+  logger.info("Setting up shipping profile...")
+  const existingProfiles = await fulfillmentModuleService.listShippingProfiles({
+    type: "default",
+  })
+
+  let shippingProfile = existingProfiles[0]
+  if (!shippingProfile) {
+    const { result } = await createShippingProfilesWorkflow(container).run({
+      input: { data: [{ name: "Default Shipping Profile", type: "default" }] },
+    })
+    shippingProfile = result[0]
+  }
+  logger.info(`✅ Shipping profile: ${shippingProfile.id}`)
+
+  // ─── 7. Fulfillment Set dengan Indonesia geo zone ───
+  logger.info("Creating fulfillment set for Indonesia...")
+  const existingSets = await fulfillmentModuleService.listFulfillmentSets({
+    name: "Pengiriman Indonesia",
+  })
+
+  let fulfillmentSet: any
+  if (existingSets.length > 0) {
+    fulfillmentSet = existingSets[0]
+    logger.info(`✅ Found existing fulfillment set: ${fulfillmentSet.id}`)
+  } else {
+    fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
+      name: "Pengiriman Indonesia",
+      type: "shipping",
+      service_zones: [
+        {
+          name: "Indonesia",
+          geo_zones: [
+            {
+              country_code: "id",  // ← Indonesia
+              type: "country",
+            },
+          ],
+        },
+      ],
+    })
+    logger.info(`✅ Created fulfillment set: ${fulfillmentSet.id}`)
+  }
+
+  // Link warehouse ke fulfillment set
+  try {
+    await link.create({
+      [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
+      [Modules.FULFILLMENT]: { fulfillment_set_id: fulfillmentSet.id },
+    })
+  } catch {
+    logger.info("ℹ️ Already linked")
+  }
+
+  // ─── 8. Shipping Options dengan harga IDR ───
+  logger.info("Creating shipping options...")
+  const serviceZoneId = fulfillmentSet.service_zones?.[0]?.id
+
+  if (!serviceZoneId) {
+    logger.error("❌ No service zone found!")
+    return
+  }
+
+  try {
+    await createShippingOptionsWorkflow(container).run({
+      input: [
+        {
+          name: "Reguler (3-5 hari)",
+          price_type: "flat",
+          provider_id: "manual_manual",
+          service_zone_id: serviceZoneId,
+          shipping_profile_id: shippingProfile.id,
+          type: {
+            label: "Reguler",
+            description: "Estimasi tiba 3-5 hari kerja",
+            code: "regular",
+          },
+          prices: [
+            {
+              currency_code: "idr",
+              amount: 15000,  // Rp 15.000
+            },
+            {
+              region_id: region.id,
+              amount: 15000,
+            },
+          ],
+          rules: [
+            { attribute: "enabled_in_store", value: "true", operator: "eq" },
+            { attribute: "is_return", value: "false", operator: "eq" },
+          ],
+        },
+        {
+          name: "Express (1-2 hari)",
+          price_type: "flat",
+          provider_id: "manual_manual",
+          service_zone_id: serviceZoneId,
+          shipping_profile_id: shippingProfile.id,
+          type: {
+            label: "Express",
+            description: "Estimasi tiba 1-2 hari kerja",
+            code: "express",
+          },
+          prices: [
+            {
+              currency_code: "idr",
+              amount: 35000,  // Rp 35.000
+            },
+            {
+              region_id: region.id,
+              amount: 35000,
+            },
+          ],
+          rules: [
+            { attribute: "enabled_in_store", value: "true", operator: "eq" },
+            { attribute: "is_return", value: "false", operator: "eq" },
+          ],
+        },
+        {
+          name: "Same Day (hari ini)",
+          price_type: "flat",
+          provider_id: "manual_manual",
+          service_zone_id: serviceZoneId,
+          shipping_profile_id: shippingProfile.id,
+          type: {
+            label: "Same Day",
+            description: "Tiba di hari yang sama (area tertentu)",
+            code: "same_day",
+          },
+          prices: [
+            {
+              currency_code: "idr",
+              amount: 60000,  // Rp 60.000
+            },
+            {
+              region_id: region.id,
+              amount: 60000,
+            },
+          ],
+          rules: [
+            { attribute: "enabled_in_store", value: "true", operator: "eq" },
+            { attribute: "is_return", value: "false", operator: "eq" },
+          ],
+        },
+      ],
+    })
+    logger.info("✅ Shipping options created!")
+  } catch (err: any) {
+    logger.error(`❌ Error creating shipping options: ${err.message}`)
+  }
+
+  // ─── 9. Midtrans sebagai payment provider di region ───
+  logger.info("Adding Midtrans to Indonesia region...")
+  try {
+    // ✅ PERUBAHAN: Gunakan Link Module untuk menghubungkan Region dengan Payment Provider
+    await link.create({
+      [Modules.REGION]: { region_id: region.id },
+      [Modules.PAYMENT]: { payment_provider_id: "pp_midtrans_midtrans" },
+    })
+    
+    await link.create({
+      [Modules.REGION]: { region_id: region.id },
+      [Modules.PAYMENT]: { payment_provider_id: "pp_system_default" },
+    })
+
+    logger.info("✅ Midtrans and default payment added to Indonesia region")
+  } catch (err: any) {
+    // Kalau sudah pernah di-link sebelumnya, dia akan masuk ke catch ini (aman)
+    logger.info(`ℹ️ Info / Already linked: ${err.message}`)
+  }
+
+  logger.info("🎉 Setup Indonesia selesai!")
+  logger.info(`Region ID baru: ${region.id}`)
+  logger.info("Sekarang update .env.local storefront dengan:")
+  logger.info("NEXT_PUBLIC_DEFAULT_REGION=id")
+}
+</file>
+
 <file path="safiya-veil-storefront/src/app/[countryCode]/(checkout)/layout.tsx">
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
@@ -19958,118 +17215,6 @@ const Register = ({ setCurrentView }: Props) => {
 }
 
 export default Register
-</file>
-
-<file path="safiya-veil-storefront/src/modules/account/templates/account-layout.tsx">
-import React from "react"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import AccountNav from "../components/account-nav"
-import { HttpTypes } from "@medusajs/types"
-
-interface AccountLayoutProps {
-  customer: HttpTypes.StoreCustomer | null
-  children: React.ReactNode
-}
-
-const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => {
-  return (
-    <div
-      className="flex-1 small:py-12 min-h-screen"
-      style={{ backgroundColor: "#f5f0eb" }}
-      data-testid="account-page"
-    >
-      {/* Header */}
-      <div
-        className="w-full py-10 border-b text-center mb-8"
-        style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
-      >
-        <div className="content-container">
-          <span
-            className="text-xs tracking-[0.3em] uppercase"
-            style={{ color: "#c9a96e" }}
-          >
-            Safiya Veil
-          </span>
-          <h1
-            className="text-3xl font-light tracking-wide mt-2"
-            style={{ color: "#1a1a1a" }}
-          >
-            Akun Saya
-          </h1>
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="h-px w-12" style={{ backgroundColor: "#e8e0d5" }} />
-            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#c9a96e" }} />
-            <div className="h-px w-12" style={{ backgroundColor: "#e8e0d5" }} />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 content-container h-full max-w-5xl mx-auto">
-        <div
-          className="border"
-          style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
-        >
-          <div className="grid grid-cols-1 small:grid-cols-[220px_1fr]">
-            {/* Sidebar */}
-            {customer && (
-              <div
-                className="p-6 border-b small:border-b-0 small:border-r"
-                style={{ borderColor: "#e8e0d5" }}
-              >
-                {/* Greeting */}
-                <div className="mb-6 pb-4 border-b" style={{ borderColor: "#e8e0d5" }}>
-                  <p className="text-xs tracking-wide" style={{ color: "#6b6b6b" }}>
-                    Halo,
-                  </p>
-                  <p
-                    className="text-base font-semibold mt-1"
-                    style={{ color: "#1a1a1a" }}
-                  >
-                    {customer.first_name} {customer.last_name}
-                  </p>
-                </div>
-                <AccountNav customer={customer} />
-              </div>
-            )}
-
-            {/* Content */}
-            <div className="flex-1 p-6 small:p-8">{children}</div>
-          </div>
-        </div>
-
-        {/* Help section */}
-        <div
-          className="flex flex-col small:flex-row items-end justify-between border-t py-8 mt-8 gap-8"
-          style={{ borderColor: "#e8e0d5" }}
-        >
-          <div>
-            <h3
-              className="text-base font-semibold mb-2 tracking-wide"
-              style={{ color: "#1a1a1a" }}
-            >
-              Butuh Bantuan?
-            </h3>
-            <p
-              className="text-sm font-light"
-              style={{ color: "#6b6b6b" }}
-            >
-              Hubungi kami jika ada pertanyaan seputar pesanan atau produk.
-            </p>
-          </div>
-          <LocalizedClientLink
-            href="/contact"
-            className="text-xs tracking-[0.15em] uppercase border px-6 py-3 transition-all duration-200 hover:opacity-70"
-            style={{ borderColor: "#1a1a1a", color: "#1a1a1a" }}
-          >
-            Hubungi Kami
-          </LocalizedClientLink>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default AccountLayout
 </file>
 
 <file path="safiya-veil-storefront/src/modules/cart/components/empty-cart-message/index.tsx">
@@ -22062,6 +19207,118 @@ const Login = ({ setCurrentView }: Props) => {
 export default Login
 </file>
 
+<file path="safiya-veil-storefront/src/modules/account/templates/account-layout.tsx">
+import React from "react"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import AccountNav from "../components/account-nav"
+import { HttpTypes } from "@medusajs/types"
+
+interface AccountLayoutProps {
+  customer: HttpTypes.StoreCustomer | null
+  children: React.ReactNode
+}
+
+const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => {
+  return (
+    <div
+      className="flex-1 small:py-12 min-h-screen"
+      style={{ backgroundColor: "#f5f0eb" }}
+      data-testid="account-page"
+    >
+      {/* Header */}
+      <div
+        className="w-full py-10 border-b text-center mb-8"
+        style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
+      >
+        <div className="content-container">
+          <span
+            className="text-xs tracking-[0.3em] uppercase"
+            style={{ color: "#c9a96e" }}
+          >
+            Safiya Veil
+          </span>
+          <h1
+            className="text-3xl font-light tracking-wide mt-2"
+            style={{ color: "#1a1a1a" }}
+          >
+            Akun Saya
+          </h1>
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <div className="h-px w-12" style={{ backgroundColor: "#e8e0d5" }} />
+            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#c9a96e" }} />
+            <div className="h-px w-12" style={{ backgroundColor: "#e8e0d5" }} />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 content-container h-full max-w-5xl mx-auto">
+        <div
+          className="border"
+          style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
+        >
+          <div className={`grid grid-cols-1 ${customer ? "small:grid-cols-[220px_1fr]" : ""}`}>
+            {/* Sidebar */}
+            {customer && (
+              <div
+                className="p-6 border-b small:border-b-0 small:border-r"
+                style={{ borderColor: "#e8e0d5" }}
+              >
+                {/* Greeting */}
+                <div className="mb-6 pb-4 border-b" style={{ borderColor: "#e8e0d5" }}>
+                  <p className="text-xs tracking-wide" style={{ color: "#6b6b6b" }}>
+                    Halo,
+                  </p>
+                  <p
+                    className="text-base font-semibold mt-1"
+                    style={{ color: "#1a1a1a" }}
+                  >
+                    {customer.first_name} {customer.last_name}
+                  </p>
+                </div>
+                <AccountNav customer={customer} />
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="flex-1 p-6 small:p-8">{children}</div>
+          </div>
+        </div>
+
+        {/* Help section */}
+        <div
+          className="flex flex-col small:flex-row items-end justify-between border-t py-8 mt-8 gap-8"
+          style={{ borderColor: "#e8e0d5" }}
+        >
+          <div>
+            <h3
+              className="text-base font-semibold mb-2 tracking-wide"
+              style={{ color: "#1a1a1a" }}
+            >
+              Butuh Bantuan?
+            </h3>
+            <p
+              className="text-sm font-light"
+              style={{ color: "#6b6b6b" }}
+            >
+              Hubungi kami jika ada pertanyaan seputar pesanan atau produk.
+            </p>
+          </div>
+          <LocalizedClientLink
+            href="/contact"
+            className="text-xs tracking-[0.15em] uppercase border px-6 py-3 transition-all duration-200 hover:opacity-70"
+            style={{ borderColor: "#1a1a1a", color: "#1a1a1a" }}
+          >
+            Hubungi Kami
+          </LocalizedClientLink>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default AccountLayout
+</file>
+
 <file path="safiya-veil-storefront/src/modules/account/templates/login-template.tsx">
 "use client"
 
@@ -22083,11 +19340,10 @@ const LoginTemplate = () => {
       style={{ backgroundColor: "#f5f0eb" }}
     >
       <div
-        className="w-full p-8 border"
+        className="w-full p-8 border max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl"
         style={{
           backgroundColor: "#ffffff",
-          borderColor: "#e8e0d5",
-          maxWidth: "448px",     
+          borderColor: "#e8e0d5",             
         }}
       >
         {/* Brand Header */}
