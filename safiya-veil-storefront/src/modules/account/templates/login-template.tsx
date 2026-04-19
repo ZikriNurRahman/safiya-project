@@ -14,12 +14,15 @@ const LoginTemplate = () => {
 
   return (
     <div
-      className="w-full min-h-[100dvh] flex items-center justify-center py-16"
+      className="w-full min-h-screen flex items-center justify-center py-8 overflow-y-auto"
       style={{ backgroundColor: "#f5f0eb" }}
     >
       <div
-        className="w-full max-w-md p-10 border"
-        style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
+        className="w-full p-8 border max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl"
+        style={{
+          backgroundColor: "#ffffff",
+          borderColor: "#e8e0d5",             
+        }}
       >
         {/* Brand Header */}
         <div className="text-center mb-8">

@@ -46,7 +46,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
           className="border"
           style={{ backgroundColor: "#ffffff", borderColor: "#e8e0d5" }}
         >
-          <div className="grid grid-cols-1 small:grid-cols-[220px_1fr]">
+          <div className={`grid grid-cols-1 ${customer ? "small:grid-cols-[220px_1fr]" : ""}`}>
             {/* Sidebar */}
             {customer && (
               <div

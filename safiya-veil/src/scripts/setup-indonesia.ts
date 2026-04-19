@@ -302,12 +302,21 @@ export default async function setupIndonesia({ container }: ExecArgs) {
   // ─── 9. Midtrans sebagai payment provider di region ───
   logger.info("Adding Midtrans to Indonesia region...")
   try {
-    await regionModuleService.updateRegions(region.id, {
-      payment_providers: ["pp_midtrans_midtrans", "pp_system_default"],
+    // ✅ PERUBAHAN: Gunakan Link Module untuk menghubungkan Region dengan Payment Provider
+    await link.create({
+      [Modules.REGION]: { region_id: region.id },
+      [Modules.PAYMENT]: { payment_provider_id: "pp_midtrans_midtrans" },
     })
-    logger.info("✅ Midtrans added to Indonesia region")
+    
+    await link.create({
+      [Modules.REGION]: { region_id: region.id },
+      [Modules.PAYMENT]: { payment_provider_id: "pp_system_default" },
+    })
+
+    logger.info("✅ Midtrans and default payment added to Indonesia region")
   } catch (err: any) {
-    logger.info(`ℹ️ Could not update region payment providers: ${err.message}`)
+    // Kalau sudah pernah di-link sebelumnya, dia akan masuk ke catch ini (aman)
+    logger.info(`ℹ️ Info / Already linked: ${err.message}`)
   }
 
   logger.info("🎉 Setup Indonesia selesai!")
