@@ -15,18 +15,13 @@ import {
   setAuthToken,
 } from "./cookies"
 
-export const retrieveCustomer =
-  async (): Promise<HttpTypes.StoreCustomer | null> => {
+export const retrieveCustomer = async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
 
     if (!authHeaders) return null
 
     const headers = {
       ...authHeaders,
-    }
-
-    const next = {
-      ...(await getCacheOptions("customers")),
     }
 
     return await sdk.client
@@ -36,8 +31,7 @@ export const retrieveCustomer =
           fields: "*orders",
         },
         headers,
-        next,
-        cache: "force-cache",
+        cache: "no-cache",
       })
       .then(({ customer }) => customer)
       .catch(() => null)

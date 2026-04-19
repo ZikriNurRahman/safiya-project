@@ -4,6 +4,10 @@ import CartTemplate from "@modules/cart/templates"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
+// export const dynamic = "force-dynamic"
+// export const fetchCache = "force-no-store"
+// export const revalidate = 0
+
 export const metadata: Metadata = {
   title: "Cart",
   description: "View your cart",
